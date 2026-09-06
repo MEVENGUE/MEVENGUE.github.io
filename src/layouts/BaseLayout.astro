@@ -31,9 +31,13 @@ const socialImage = new URL(withBase(image), Astro.site);
 <html lang={locale} data-theme="light">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#FAF9F6" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
@@ -64,12 +68,22 @@ const socialImage = new URL(withBase(image), Astro.site);
     <main id="main"><slot /></main>
     <Footer locale={locale} />
     <script is:inline>
-      document.querySelector('[data-menu-button]')?.addEventListener('click', (event) => {
-        const button = event.currentTarget;
-        const menu = document.querySelector('[data-menu]');
-        const open = button.getAttribute('aria-expanded') !== 'true';
-        button.setAttribute('aria-expanded', String(open));
+      const menuButton = document.querySelector('[data-menu-button]');
+      const menu = document.querySelector('[data-menu]');
+      const setMenu = (open) => {
+        menuButton?.setAttribute('aria-expanded', String(open));
         menu?.toggleAttribute('data-open', open);
+        document.body.classList.toggle('menu-open', open);
+      };
+      menuButton?.addEventListener('click', () => {
+        setMenu(menuButton.getAttribute('aria-expanded') !== 'true');
+      });
+      menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setMenu(false);
+      });
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.site-header')) setMenu(false);
       });
       document.querySelectorAll('[data-locale]').forEach((link) => link.addEventListener('click', () => {
         localStorage.setItem('fm-locale', link.dataset.locale);

@@ -28,7 +28,7 @@ interface EngineOptions {
 export async function createPlanetEngine(options: EngineOptions): Promise<PlanetEngine> {
   const THREE = await import('three');
   const { root, canvas, manifest, copy, announce, onTourChange, sound } = options;
-  const mobile = matchMedia('(max-width: 760px)').matches;
+  const mobile = matchMedia('(max-width: 900px), (max-height: 740px), (pointer: coarse)').matches;
   const lowPower = mobile || (navigator.hardwareConcurrency || 8) <= 4;
   const quality = lowPower ? 0.62 : 1;
   const renderer = new THREE.WebGLRenderer({

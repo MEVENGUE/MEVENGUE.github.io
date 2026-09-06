@@ -1,0 +1,263 @@
+/* Intermediate laptops and large tablets */
+@media (max-width: 1120px) {
+  .hero-copy h1 {
+    max-width: 12ch;
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+  }
+
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-portrait {
+    position: relative;
+    top: auto;
+    max-width: 360px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .page-hero {
+    padding: clamp(7.5rem, 14vw, 10rem) 0 3rem;
+  }
+
+  .page-hero h1 {
+    max-width: none;
+    font-size: clamp(2rem, 8vw, 3.2rem);
+  }
+
+  .prose h2 {
+    font-size: clamp(1.6rem, 6vw, 2.1rem);
+  }
+
+  .constellation {
+    min-height: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 1rem;
+  }
+
+  .constellation span {
+    position: static;
+    top: auto;
+    left: auto;
+  }
+
+  .button-row {
+    width: 100%;
+  }
+
+  .button {
+    min-height: 2.85rem;
+  }
+}
+
+/* Phones, Switch portrait-like widths, small tablets */
+@media (max-width: 640px) {
+  h1 {
+    font-size: clamp(2rem, 9vw, 3.1rem);
+  }
+
+  h2,
+  .section h2 {
+    font-size: clamp(1.7rem, 7vw, 2.5rem);
+  }
+
+  .wrap {
+    width: min(1180px, calc(100% - 1.25rem));
+  }
+
+  .profile-intro {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .profile-intro figure {
+    width: min(168px, 46vw);
+  }
+
+  .profile-intro h2 {
+    font-size: clamp(1.9rem, 9vw, 2.6rem);
+  }
+
+  .education-list article {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .education-list article img,
+  .education-list article div {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .academic-project {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .academic-visual {
+    max-width: 100%;
+  }
+
+  .publication-index > article {
+    grid-template-columns: 1fr;
+  }
+
+  .publication-index > article > span {
+    font-size: 1.4rem;
+  }
+
+  .catalog-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-summary div,
+  .catalog-summary div:nth-child(-n + 2) {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .school-heading {
+    grid-template-columns: 72px 1fr;
+  }
+
+  .contact-directory > * {
+    grid-template-columns: 1fr auto;
+    min-height: 4.4rem;
+  }
+
+  .contact-directory span {
+    grid-column: 1 / -1;
+  }
+
+  .academic-copy .meta {
+    font-size: 0.58rem;
+    line-height: 1.5;
+  }
+
+  .hero-copy .lead {
+    max-width: none;
+  }
+}
+
+/* Compact phones */
+@media (max-width: 420px) {
+  .hero-copy h1,
+  .page-hero h1 {
+    font-size: clamp(1.75rem, 10vw, 2.3rem);
+  }
+
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .planet-control {
+    padding: 0.55rem 0.65rem;
+  }
+
+  .planet-shell {
+    height: min(92vw, 22rem);
+    min-height: 16rem;
+  }
+}
+
+/* Landscape phones, Nintendo Switch, Steam Deck, TV browsers */
+@media (max-height: 720px) and (orientation: landscape) {
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.9fr) minmax(18rem, 1.1fr);
+    align-items: center;
+    min-height: 100svh;
+    padding: max(5.5rem, calc(4rem + env(safe-area-inset-top))) 0 1.5rem;
+  }
+
+  .hero-copy {
+    align-self: center;
+    padding: 0;
+  }
+
+  .hero-copy h1 {
+    max-width: 12ch;
+    margin: 0.6rem 0;
+    font-size: clamp(1.7rem, 4.4vw, 2.8rem);
+  }
+
+  .hero-copy .lead {
+    margin-top: 0.7rem;
+  }
+
+  .button-row {
+    margin-top: 1rem;
+  }
+
+  .planet-shell {
+    position: relative;
+    inset: auto;
+    height: min(68svh, 28rem);
+    min-height: 16rem;
+    margin: 0;
+  }
+
+  .planet-directory {
+    grid-column: 1 / -1;
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: min(1180px, calc(100% - 2rem));
+    margin: 0.6rem auto 0;
+  }
+
+  .planet-hint {
+    display: none;
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+}
+
+/* Touch devices: larger targets, no hover lifts */
+@media (hover: none), (pointer: coarse) {
+  .button,
+  .planet-control,
+  .academic-links a,
+  .nav-glass a,
+  .filter,
+  .document-tab {
+    min-height: 2.75rem;
+  }
+
+  .card:hover,
+  .academic-visual:hover img,
+  .button:hover {
+    transform: none;
+  }
+
+  .planet-canvas {
+    touch-action: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .wrap,
+  .hero-copy,
+  .site-footer {
+    width: min(1280px, calc(100% - 4rem));
+  }
+}
+
+@media (min-width: 1800px) {
+  .wrap,
+  .hero-copy,
+  .site-footer {
+    width: min(1400px, calc(100% - 6rem));
+  }
+}

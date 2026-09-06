@@ -14,9 +14,9 @@
 
 .site-header {
   position: fixed;
-  top: 1rem;
-  right: max(1rem, 3vw);
-  left: max(1rem, 3vw);
+  top: max(0.7rem, env(safe-area-inset-top));
+  right: max(0.7rem, env(safe-area-inset-right), 3vw);
+  left: max(0.7rem, env(safe-area-inset-left), 3vw);
   z-index: 40;
   display: flex;
   align-items: center;
@@ -97,6 +97,7 @@ main {
 .wrap {
   width: min(1180px, calc(100% - 2rem));
   margin-inline: auto;
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
 }
 
 .section {
@@ -184,14 +185,10 @@ main {
   gap: 1rem;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1120px) {
   .site-header {
-    right: 0.65rem;
-    left: 0.65rem;
-  }
-
-  .brand > span:last-child {
-    display: none;
+    right: max(0.65rem, env(safe-area-inset-right));
+    left: max(0.65rem, env(safe-area-inset-left));
   }
 
   .menu-button {
@@ -210,21 +207,32 @@ main {
     width: 1rem;
     height: 1px;
     background: currentColor;
+    transition: transform 0.2s ease;
+  }
+
+  .menu-button[aria-expanded="true"] span:first-child {
+    transform: translateY(0.2rem) rotate(45deg);
+  }
+
+  .menu-button[aria-expanded="true"] span:last-child {
+    transform: translateY(-0.2rem) rotate(-45deg);
   }
 
   .nav-glass {
     position: absolute;
-    top: 3.5rem;
+    top: calc(100% + 0.55rem);
     right: 0;
+    left: 0;
     display: none;
     flex-direction: column;
     align-items: stretch;
-    min-width: 210px;
-    padding: 0.6rem;
+    max-height: min(78svh, 36rem);
+    overflow: auto;
+    padding: 0.7rem;
     border: 1px solid var(--line);
-    border-radius: 1rem;
-    background: rgba(250, 249, 246, 0.96);
-    box-shadow: 0 20px 60px rgba(23, 23, 23, 0.1);
+    border-radius: 1.15rem;
+    background: rgba(250, 249, 246, 0.98);
+    box-shadow: 0 20px 60px rgba(23, 23, 23, 0.12);
   }
 
   .nav-glass[data-open] {
@@ -232,11 +240,23 @@ main {
   }
 
   .nav-glass a {
-    padding: 0.75rem 1rem;
+    min-height: 2.75rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 800px) {
+  .brand > span:last-child {
+    display: none;
   }
 
   .section {
-    padding: 5rem 0;
+    padding: 4.5rem 0;
   }
 
   .section-head {
@@ -246,5 +266,6 @@ main {
 
   .site-footer {
     flex-direction: column;
+    padding-bottom: max(3rem, env(safe-area-inset-bottom));
   }
 }
