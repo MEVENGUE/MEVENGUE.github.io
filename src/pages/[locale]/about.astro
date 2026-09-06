@@ -2,9 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { locales, t, type Locale } from '@/i18n';
 import { site } from '@/config/site';
+import { withBase } from '@/lib/url';
 import profilePhoto from '../../../photo_profil_cv.jpg';
-import ecamLogo from '../../../Logo écoles/ECAM EPMI Logo.png';
-import supinfoLogo from '../../../Logo écoles/SUPINFO Paris Logo.png';
 export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
 const locale = Astro.params.locale as Locale;
 const copy = t(locale);
@@ -19,7 +18,7 @@ const skills = ['Cloud architecture', 'Systems', 'Networking', 'DevOps', 'DevSec
     <figure class="profile-portrait"><img src={profilePhoto.src} width={profilePhoto.width} height={profilePhoto.height} alt={locale === 'fr' ? `Portrait professionnel de ${site.name}` : `Professional portrait of ${site.name}`} /><figcaption>{site.name} · {site.location}</figcaption></figure>
     <div>
       <p class="eyebrow">{locale === 'fr' ? 'Formation et pratique' : 'Education and practice'}</p>
-      <div class="school-signatures"><img src={ecamLogo.src} alt="ECAM EPMI" loading="lazy" /><span>×</span><img src={supinfoLogo.src} alt="SUPINFO Paris" loading="lazy" /></div>
+      <div class="school-signatures"><img src={withBase('/assets/school-ecam-epmi.png')} alt="ECAM EPMI" loading="lazy" /><span>×</span><img src={withBase('/assets/school-supinfo-paris.png')} alt="SUPINFO Paris" loading="lazy" /></div>
       <div class="timeline">{schools.map(([date, name, text], i) => <div class="timeline-item"><div class="school-logo">0{i + 1}</div><p class="meta">{date}</p><h3>{name}</h3><p class="lead">{text}</p></div>)}</div>
     </div>
     <aside class="profile-skills">
