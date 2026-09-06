@@ -4,7 +4,7 @@ Portfolio académique bilingue consacré à mes travaux en cloud, systèmes, ré
 
 Le site transforme mon parcours ECAM EPMI et SUPINFO Paris en une archive technique consultable : études de cas, architectures, articles, documentation et livrables originaux sont réunis dans une expérience éditoriale interactive.
 
-[Visiter le portfolio](https://mevengue.github.io/mevenguefranck.github.io/)
+[Visiter le portfolio](https://mevengue.github.io/)
 
 ## Expérience
 
@@ -76,7 +76,7 @@ npm install
 npm run dev
 ```
 
-Le site est ensuite disponible sur `http://localhost:4321/mevenguefranck.github.io/`.
+Le site est ensuite disponible sur `http://localhost:4321`.
 
 ## Commandes
 
@@ -89,11 +89,11 @@ npm run preview   # prévisualisation du build
 
 ## Déploiement sur GitHub Pages
 
-Le site est configuré comme project site du dépôt
-[`MEVENGUE/mevenguefranck.github.io`](https://github.com/MEVENGUE/mevenguefranck.github.io).
+Le site est configuré comme site utilisateur du dépôt
+[`MEVENGUE/MEVENGUE.github.io`](https://github.com/MEVENGUE/MEVENGUE.github.io).
 Son URL publique est :
 
-<https://mevengue.github.io/mevenguefranck.github.io/>
+<https://mevengue.github.io/>
 
 Le workflow `.github/workflows/deploy.yml` construit puis publie automatiquement
 le site sur GitHub Pages à chaque push sur `main`. Il peut aussi être déclenché

@@ -3,7 +3,6 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://mevengue.github.io',
-  base: '/mevenguefranck.github.io',
   output: 'static',
   integrations: [sitemap()],
   markdown: {
