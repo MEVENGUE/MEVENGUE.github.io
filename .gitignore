@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+
+# Archives de travail non nécessaires au déploiement
+Logo écoles/
+Projet Ingénieur ECAM EPMI/
+Projet Master SUPINFO PARIS/
+Logo site.jpg
+Logo site fond blanc.jpg

@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { entrySlug, localizedCollection } from '@/lib/content';
+import { locales, t, type Locale } from '@/i18n';
+import { withBase } from '@/lib/url';
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const copy = t(locale);
+const entries = await localizedCollection('articles', locale);
+---
+<BaseLayout locale={locale} title={copy.nav.journal}>
+  <header class="page-hero"><div class="wrap"><p class="eyebrow">04 · {copy.nav.journal}</p><h1>{locale === 'fr' ? 'Articles techniques' : 'Technical articles'}</h1><p class="lead">{locale === 'fr' ? 'Analyses, retours d’expérience et explications issus de projets en systèmes, cloud, réseaux et automatisation.' : 'Analysis, practical feedback and explanations from systems, cloud, networking and automation projects.'}</p></div></header>
+  <section class="section wrap publication-index">
+    {entries.map((entry, index) => <article><span>{String(index + 1).padStart(2, '0')}</span><div><p class="meta">{entry.data.tags.join(' · ')} · {entry.data.readingTime}</p><h2><a href={withBase(`/${locale}/journal/${entrySlug(entry)}/`)}>{entry.data.title}</a></h2><p>{entry.data.description}</p><a class="text-cta" href={withBase(`/${locale}/journal/${entrySlug(entry)}/`)}>{locale === 'fr' ? 'Lire l’article' : 'Read article'} →</a></div></article>)}
+  </section>
+</BaseLayout>

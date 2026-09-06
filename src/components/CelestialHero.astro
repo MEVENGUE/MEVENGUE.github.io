@@ -1,0 +1,223 @@
+---
+import type { Locale } from '@/i18n';
+import { t } from '@/i18n';
+import { localizedCollection } from '@/lib/content';
+import { createPlanetManifest } from '@/lib/planet/manifest';
+import { withBase } from '@/lib/url';
+
+const { locale } = Astro.props as { locale: Locale };
+const copy = t(locale);
+const projects = await localizedCollection('projects', locale);
+const manifest = createPlanetManifest(projects, locale, copy.planet.zones);
+const serializedManifest = JSON.stringify(manifest).replace(/</g, '\\u003c');
+---
+<section class="hero planet-hero">
+  <div class="wrap hero-copy">
+    <p class="hero-person">Franck Mevengue</p>
+    <p class="eyebrow">{copy.heroEyebrow}</p>
+    <h1>{copy.heroTitle}</h1>
+    <p class="lead">{copy.heroText}</p>
+    <div class="button-row">
+      <a class="button primary" href={withBase(`/${locale}/work/`)}>{copy.explore} ↗</a>
+      <a class="button" href={withBase(`/${locale}/contact/`)}>{copy.contact}</a>
+    </div>
+  </div>
+
+  <div
+    class="planet-shell"
+    data-planet
+    data-copy={JSON.stringify({
+      openProject: copy.planet.openProject,
+      guidedStarted: copy.planet.guidedStarted,
+      guidedStopped: copy.planet.guidedStopped,
+      webglUnavailable: copy.planet.webglUnavailable,
+    })}
+  >
+    <canvas
+      class="planet-canvas"
+      data-planet-canvas
+      tabindex="0"
+      role="img"
+      aria-label={copy.planet.ariaLabel}
+      aria-describedby={`planet-keyboard-help-${locale}`}
+    ></canvas>
+    <p class="sr-only" id={`planet-keyboard-help-${locale}`}>
+      {locale === 'fr'
+        ? 'Utilisez Espace pour démarrer la visite guidée ou passer à la zone suivante. Les liens de la liste permettent d’ouvrir chaque projet au clavier.'
+        : 'Press Space to start the guided tour or move to the next zone. Use the links in the list to open each project with the keyboard.'}
+    </p>
+
+    <svg class="planet-fallback" viewBox="0 0 720 720" role="img" aria-label={copy.planet.ariaLabel}>
+      <defs>
+        <radialGradient id={`planet-ocean-${locale}`} cx="35%" cy="28%">
+          <stop stop-color="#82c9b8"/>
+          <stop offset=".48" stop-color="#19786f"/>
+          <stop offset="1" stop-color="#0a3c3b"/>
+        </radialGradient>
+        <filter id={`planet-glow-${locale}`}><feGaussianBlur stdDeviation="13"/></filter>
+      </defs>
+      <circle cx="360" cy="360" r="226" fill="none" stroke="#53c6b6" stroke-width="20" opacity=".18" filter={`url(#planet-glow-${locale})`}/>
+      <circle cx="360" cy="360" r="214" fill={`url(#planet-ocean-${locale})`}/>
+      <g fill="#aebd91" stroke="#e9dfc5" stroke-width="2" opacity=".96">
+        <path d="M207 245c45-69 125-108 182-89 34 11 48 40 22 62-24 20-63 20-70 52-6 28 32 48 11 72-23 26-88 18-124-17-24-23-37-52-21-80Z"/>
+        <path d="M381 348c30-31 89-45 130-16 49 34 41 99-8 142-44 39-118 61-144 17-17-29 12-55 24-82 10-22-23-40-2-61Z"/>
+      </g>
+      <g fill="#f1ead8" stroke="#d6ad59" stroke-width="2">
+        <rect x="272" y="208" width="24" height="62"/><rect x="303" y="221" width="31" height="49"/>
+        <rect x="430" y="331" width="26" height="57"/><rect x="462" y="345" width="20" height="43"/>
+      </g>
+      <g fill="none" stroke="#f0ce78" stroke-width="3" stroke-dasharray="5 8" opacity=".9">
+        <path d="M288 273Q368 308 443 343"/><path d="M316 245Q401 227 489 276"/><path d="M443 380Q359 428 281 458"/>
+      </g>
+      <g fill="#ffd36f">
+        <circle cx="288" cy="273" r="7"/><circle cx="443" cy="343" r="7"/><circle cx="489" cy="276" r="7"/><circle cx="281" cy="458" r="7"/>
+      </g>
+    </svg>
+
+    <div class="planet-labels" aria-hidden="true">
+      {manifest.zones.map((zone) => (
+        <span class="planet-zone-label" data-zone-label={zone.id}>
+          {zone.title}<small>{zone.projects.length}</small>
+        </span>
+      ))}
+      {manifest.projects.map((project) => (
+        <span class="planet-project-label" data-project-label={project.id}>{project.title}</span>
+      ))}
+    </div>
+
+    <div class="planet-controls">
+      <button class="planet-control" type="button" data-tour aria-label={copy.planet.guidedTour} aria-pressed="false">◎ {copy.planet.guidedTour}</button>
+      <button class="planet-control" type="button" data-sound data-on={copy.soundOn} data-off={copy.soundOff} aria-pressed="false">◌ {copy.soundOn}</button>
+    </div>
+    <span class="planet-hint">{copy.planet.instruction}</span>
+    <p class="sr-only" data-planet-status aria-live="polite"></p>
+
+    <script is:inline type="application/json" data-planet-manifest set:html={serializedManifest}></script>
+  </div>
+
+  <details class="planet-directory">
+    <summary>{copy.planet.projectsLabel} ({manifest.projects.length})</summary>
+    <div class="planet-directory-grid">
+      {manifest.zones.map((zone) => (
+        <section>
+          <h2>
+            <button type="button" data-directory-zone={zone.id}>{zone.title}</button>
+          </h2>
+          <ul>
+            {zone.projects.map((project) => (
+              <li><a href={project.href}>{project.title}</a></li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </details>
+</section>
+
+<script>
+  import type { PlanetEngine } from '@/planet/planet-engine';
+  import type { PlanetManifest, PlanetUiCopy } from '@/planet/types';
+
+  const roots = document.querySelectorAll<HTMLElement>('[data-planet]:not([data-initialized])');
+  roots.forEach((root) => {
+    root.dataset.initialized = 'true';
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-planet-canvas]');
+    const manifestNode = root.querySelector<HTMLScriptElement>('[data-planet-manifest]');
+    const status = root.querySelector<HTMLElement>('[data-planet-status]');
+    const tourButton = root.querySelector<HTMLButtonElement>('[data-tour]');
+    const soundButton = root.querySelector<HTMLButtonElement>('[data-sound]');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let engine: PlanetEngine | null = null;
+    let audio: AudioContext | null = null;
+    let soundEnabled = localStorage.getItem('fm-planet-sound') === 'on';
+
+    const announce = (message: string) => {
+      if (status) status.textContent = message;
+    };
+    const tone = () => {
+      if (!soundEnabled || !audio) return;
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(210, audio.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(390, audio.currentTime + 0.16);
+      gain.gain.setValueAtTime(0.0001, audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.035, audio.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.2);
+      oscillator.connect(gain).connect(audio.destination);
+      oscillator.start();
+      oscillator.stop(audio.currentTime + 0.21);
+    };
+
+    if (soundButton) {
+      const onLabel = soundButton.dataset.on || 'Enable sound';
+      const offLabel = soundButton.dataset.off || 'Mute sound';
+      const refreshSound = () => {
+        soundButton.setAttribute('aria-pressed', String(soundEnabled));
+        soundButton.textContent = `${soundEnabled ? '●' : '◌'} ${soundEnabled ? offLabel : onLabel}`;
+      };
+      refreshSound();
+      soundButton.addEventListener('click', async () => {
+        soundEnabled = !soundEnabled;
+        if (soundEnabled) {
+          audio ||= new AudioContext();
+          await audio.resume();
+          tone();
+        } else {
+          await audio?.suspend();
+        }
+        localStorage.setItem('fm-planet-sound', soundEnabled ? 'on' : 'off');
+        refreshSound();
+      });
+    }
+
+    const supportsWebGl = (() => {
+      try {
+        const probe = document.createElement('canvas');
+        return Boolean(probe.getContext('webgl2') || probe.getContext('webgl'));
+      } catch {
+        return false;
+      }
+    })();
+
+    if (canvas && manifestNode?.textContent && !reduced && supportsWebGl) {
+      const manifest = JSON.parse(manifestNode.textContent) as PlanetManifest;
+      const uiCopy = JSON.parse(root.dataset.copy || '{}') as PlanetUiCopy;
+      import('@/planet/planet-engine')
+        .then(({ createPlanetEngine }) => createPlanetEngine({
+          root,
+          canvas,
+          manifest,
+          copy: uiCopy,
+          announce,
+          onTourChange: (active) => tourButton?.setAttribute('aria-pressed', String(active)),
+          sound: tone,
+        }))
+        .then((instance) => {
+          engine = instance;
+          root.closest('.planet-hero')?.querySelectorAll<HTMLElement>('[data-directory-zone]').forEach((button) => {
+            button.addEventListener('click', () => {
+              canvas.focus();
+              if (button.dataset.directoryZone) engine?.focusZone(button.dataset.directoryZone);
+            });
+          });
+        })
+        .catch((error) => {
+          announce(uiCopy.webglUnavailable);
+          console.info('Planet WebGL unavailable; SVG and project directory retained.', error);
+        });
+    }
+
+    tourButton?.addEventListener('click', () => engine?.toggleTour());
+    canvas?.addEventListener('keydown', (event) => {
+      if (event.code === 'Space') {
+        event.preventDefault();
+        engine?.advanceTour();
+      }
+    });
+    document.addEventListener('astro:before-swap', () => {
+      engine?.dispose();
+      audio?.close();
+    }, { once: true });
+  });
+</script>

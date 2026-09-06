@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { entrySlug } from '@/lib/content';
+import { locales, type Locale } from '@/i18n';
+import { withBase } from '@/lib/url';
+export async function getStaticPaths() {
+  const collections = await Promise.all([getCollection('projects'), getCollection('articles'), getCollection('docs')]);
+  const slug = (tag: string) => tag.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return locales.flatMap((locale) => {
+    const localizedTags = collections.flat()
+      .filter((entry) => entry.id.startsWith(`${locale}/`))
+      .flatMap((entry) => entry.data.tags);
+    const bySlug = new Map(localizedTags.map((tag) => [slug(tag), tag]));
+    return [...bySlug].map(([tagSlug, tag]) => ({ params: { locale, tag: tagSlug }, props: { tag } }));
+  });
+}
+const locale = Astro.params.locale as Locale;
+const { tag } = Astro.props as { tag: string };
+const sets = await Promise.all([getCollection('projects'), getCollection('articles'), getCollection('docs')]);
+const names = ['work', 'journal', 'docs'];
+const entries = sets.flatMap((set, index) => set.filter((entry) => entry.id.startsWith(`${locale}/`) && !entry.data.draft && entry.data.tags.includes(tag)).map((entry) => ({ entry, base: names[index] })));
+---
+<BaseLayout locale={locale} title={`#${tag}`}>
+  <header class="page-hero"><div class="wrap"><p class="eyebrow">Tag</p><h1>#{tag}</h1><p class="lead">{entries.length} {locale === 'fr' ? 'publications' : 'entries'}</p></div></header>
+  <section class="section wrap doc-list">
+    {entries.map(({ entry, base }) => <a class="doc-item" href={withBase(`/${locale}/${base}/${entrySlug(entry)}/`)}><p class="meta">{base}</p><h3>{entry.data.title}</h3><p>{entry.data.description}</p></a>)}
+  </section>
+</BaseLayout>

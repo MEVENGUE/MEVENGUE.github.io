@@ -1,0 +1,56 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AcademicProjectList from '@/components/AcademicProjectList.astro';
+import { localizedCollection } from '@/lib/content';
+import { locales, t, type Locale } from '@/i18n';
+import { withBase } from '@/lib/url';
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const copy = t(locale);
+const entries = await localizedCollection('projects', locale);
+const byNumber = (a: typeof entries[number], b: typeof entries[number]) => Number(a.data.number || 0) - Number(b.data.number || 0);
+const featured = entries.filter((entry) => entry.data.featured).sort(byNumber);
+const ecam = entries.filter((entry) => entry.data.school?.includes('ECAM')).sort(byNumber);
+const supinfo = entries.filter((entry) => entry.data.school?.includes('SUPINFO')).sort(byNumber);
+const documentCount = entries.reduce((total, entry) => total + entry.data.documents.length, 0);
+---
+<BaseLayout locale={locale} title={copy.nav.work} description={copy.heroText}>
+  <header class="page-hero"><div class="wrap">
+    <p class="eyebrow">03 · {copy.nav.work}</p>
+    <h1>{locale === 'fr' ? 'Catalogue des projets' : 'Project catalogue'}</h1>
+    <p class="lead">{locale === 'fr' ? 'Projets académiques et personnels présentés avec leur contexte, leurs choix techniques et leurs livrables.' : 'Academic and personal projects presented with their context, technical decisions and deliverables.'}</p>
+    <div class="catalog-summary">
+      <div><strong>{entries.length}</strong><span>{locale === 'fr' ? 'projets' : 'projects'}</span></div>
+      <div><strong>{documentCount}</strong><span>{locale === 'fr' ? 'documents' : 'documents'}</span></div>
+      <div><strong>02</strong><span>{locale === 'fr' ? 'écoles' : 'schools'}</span></div>
+      <div><strong>08</strong><span>{locale === 'fr' ? 'domaines' : 'disciplines'}</span></div>
+    </div>
+  </div></header>
+
+  <section class="section wrap">
+    <div class="section-head"><div><p class="eyebrow">03A · {locale === 'fr' ? 'Sélection' : 'Selection'}</p><h2>{locale === 'fr' ? 'Études de cas' : 'Case studies'}</h2></div><p class="lead">{locale === 'fr' ? 'Une sélection de projets disposant d’une documentation détaillée.' : 'A selection of projects with detailed documentation.'}</p></div>
+    <AcademicProjectList entries={featured} locale={locale} compact />
+  </section>
+
+  <section class="section school-catalog school-catalog-supinfo">
+    <div class="wrap">
+      <header class="school-heading">
+        <div class="school-emblem"><img src={withBase('/assets/school-supinfo-paris.png')} alt="SUPINFO Paris" /></div>
+        <div><p class="eyebrow">01B · Master Systems & Networks</p><h2>SUPINFO Paris</h2><p class="lead">{locale === 'fr' ? 'Cloud, systèmes, réseaux, sécurité, virtualisation et automatisation.' : 'Cloud, systems, networking, security, virtualization and automation.'}</p></div>
+        <strong>{String(supinfo.length).padStart(2, '0')}</strong>
+      </header>
+      <AcademicProjectList entries={supinfo} locale={locale} />
+    </div>
+  </section>
+
+  <section class="section school-catalog">
+    <div class="wrap">
+      <header class="school-heading">
+        <div class="school-emblem"><img src={withBase('/assets/school-ecam-epmi.png')} alt="ECAM EPMI" /></div>
+        <div><p class="eyebrow">01C · {locale === 'fr' ? 'Cycle ingénieur' : 'Engineering cycle'}</p><h2>ECAM EPMI</h2><p class="lead">{locale === 'fr' ? 'Une base multidisciplinaire : logiciel, électronique, embarqué, cloud, cybersécurité et pilotage.' : 'A multidisciplinary foundation: software, electronics, embedded systems, cloud, cybersecurity and project leadership.'}</p></div>
+        <strong>{String(ecam.length).padStart(2, '0')}</strong>
+      </header>
+      <AcademicProjectList entries={ecam} locale={locale} />
+    </div>
+  </section>
+</BaseLayout>

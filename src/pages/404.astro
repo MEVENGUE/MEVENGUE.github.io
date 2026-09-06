@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { withBase } from '@/lib/url';
+---
+<BaseLayout locale="fr" title="404 — Page introuvable">
+  <section class="hero">
+    <div class="wrap hero-copy">
+      <p class="eyebrow">Erreur 404 · Page introuvable</p>
+      <h1>Cette page n’est pas disponible.</h1>
+      <p class="lead">The requested page is unavailable. Choose a language to return to the home page.</p>
+      <div class="button-row"><a class="button primary" href={withBase('/fr/')}>Accueil en français</a><a class="button" href={withBase('/en/')}>English home</a></div>
+    </div>
+  </section>
+</BaseLayout>

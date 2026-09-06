@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { locales, t, type Locale } from '@/i18n';
+import { site } from '@/config/site';
+import profilePhoto from '../../../photo_profil_cv.jpg';
+import ecamLogo from '../../../Logo écoles/ECAM EPMI Logo.png';
+import supinfoLogo from '../../../Logo écoles/SUPINFO Paris Logo.png';
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const copy = t(locale);
+const schools = locale === 'fr'
+  ? [['2025 — 2027', 'SUPINFO Paris · Systems & Networks', 'Master orienté architecture cloud, systèmes, réseaux, sécurité et infrastructures distribuées.'], ['Cycle ingénieur', 'ECAM EPMI', 'Formation d’ingénieur multidisciplinaire : informatique, électronique, systèmes embarqués, cloud et gestion de projet.'], ['Projets', 'Travaux techniques documentés', 'Études de cas, architectures, implémentations et livrables issus de projets académiques et personnels.']]
+  : [['2025 — 2027', 'SUPINFO Paris · Systems & Networks', 'Master’s path focused on cloud architecture, systems, networks, security and distributed infrastructure.'], ['Engineering cycle', 'ECAM EPMI', 'Multidisciplinary engineering education spanning software, electronics, embedded systems, cloud and project management.'], ['Projects', 'Documented technical work', 'Case studies, architectures, implementations and deliverables from academic and personal projects.']];
+const skills = ['Cloud architecture', 'Systems', 'Networking', 'DevOps', 'DevSecOps', 'Automation', 'AI / Data', 'Embedded'];
+---
+<BaseLayout locale={locale} title={copy.nav.about}>
+  <header class="page-hero"><div class="wrap"><p class="eyebrow">01 · {copy.nav.about}</p><h1>{locale === 'fr' ? 'Parcours et compétences' : 'Background and skills'}</h1><p class="lead">{locale === 'fr' ? 'Formation en ingénierie, systèmes et réseaux, complétée par des projets en cloud, automatisation et sécurité.' : 'Engineering, systems and networking education supported by projects in cloud, automation and security.'}</p></div></header>
+  <section class="section wrap profile-grid">
+    <figure class="profile-portrait"><img src={profilePhoto.src} width={profilePhoto.width} height={profilePhoto.height} alt={locale === 'fr' ? `Portrait professionnel de ${site.name}` : `Professional portrait of ${site.name}`} /><figcaption>{site.name} · {site.location}</figcaption></figure>
+    <div>
+      <p class="eyebrow">{locale === 'fr' ? 'Formation et pratique' : 'Education and practice'}</p>
+      <div class="school-signatures"><img src={ecamLogo.src} alt="ECAM EPMI" loading="lazy" /><span>×</span><img src={supinfoLogo.src} alt="SUPINFO Paris" loading="lazy" /></div>
+      <div class="timeline">{schools.map(([date, name, text], i) => <div class="timeline-item"><div class="school-logo">0{i + 1}</div><p class="meta">{date}</p><h3>{name}</h3><p class="lead">{text}</p></div>)}</div>
+    </div>
+    <aside class="profile-skills">
+      <p class="eyebrow">{locale === 'fr' ? 'Domaines techniques' : 'Technical areas'}</p>
+      <div class="constellation">{skills.map((skill, i) => <span style={`--x:${8 + (i * 31) % 70}%;--y:${10 + (i * 47) % 72}%`}>{skill}</span>)}</div>
+    </aside>
+  </section>
+</BaseLayout>

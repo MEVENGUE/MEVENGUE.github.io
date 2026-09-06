@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { locales, t, type Locale } from '@/i18n';
+import { site } from '@/config/site';
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const copy = t(locale);
+---
+<BaseLayout locale={locale} title={copy.nav.contact} description={locale === 'fr' ? `Contacter ${site.name} à ${site.location}.` : `Contact ${site.name} in ${site.location}.`}>
+  <header class="page-hero"><div class="wrap">
+    <p class="eyebrow">06 · {copy.nav.contact}</p>
+    <h1>{locale === 'fr' ? 'Échangeons sur votre projet.' : 'Let’s discuss your project.'}</h1>
+    <p class="lead">{locale === 'fr'
+      ? 'Pour une opportunité professionnelle, une collaboration technique ou une question sur mes travaux, le moyen le plus direct est l’email.'
+      : 'For a professional opportunity, technical collaboration or a question about my work, email is the most direct way to reach me.'}</p>
+    <div class="button-row"><a class="button primary contact-primary" href={`mailto:${site.email}`}>{site.email} ↗</a></div>
+  </div></header>
+  <section class="section wrap contact-layout">
+    <div class="contact-intro">
+      <p class="eyebrow">{locale === 'fr' ? 'Disponibilités' : 'Opportunities'}</p>
+      <h2>{locale === 'fr' ? 'Une conversation claire pour commencer.' : 'A clear conversation to begin.'}</h2>
+      <p>{locale === 'fr'
+        ? 'Je suis disponible pour discuter d’une alternance, d’un stage ou d’une collaboration en lien avec le cloud, les systèmes, les réseaux, le DevOps, la cybersécurité et l’automatisation.'
+        : 'I welcome conversations about apprenticeships, internships or collaborations related to cloud, systems, networking, DevOps, cybersecurity and automation.'}</p>
+      <p>{locale === 'fr'
+        ? 'Présentez brièvement le contexte, les objectifs et l’échéance envisagée : je pourrai ainsi vous répondre de façon précise.'
+        : 'Please briefly describe the context, goals and expected timeline so I can provide a focused response.'}</p>
+    </div>
+    <div class="contact-directory" aria-label={locale === 'fr' ? 'Coordonnées' : 'Contact details'}>
+      <a href={`mailto:${site.email}`}><span>Email</span><strong>{site.email}</strong><i>↗</i></a>
+      <a href={site.linkedin} rel="me"><span>LinkedIn</span><strong>{locale === 'fr' ? 'Profil professionnel' : 'Professional profile'}</strong><i>↗</i></a>
+      <a href={site.github} rel="me"><span>GitHub</span><strong>MEVENGUE</strong><i>↗</i></a>
+      <div><span>{locale === 'fr' ? 'Localisation' : 'Location'}</span><strong>{site.location}</strong></div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+import { getCollection, render } from 'astro:content';
+import ReaderLayout from '@/layouts/ReaderLayout.astro';
+import { contentDate, entryImage, entrySlug, formatDate } from '@/lib/content';
+import { localeFromId } from '@/i18n';
+export async function getStaticPaths() {
+  const entries = await getCollection('articles', ({ id, data }) => /^(fr|en)\//.test(id) && !data.draft);
+  return entries.map((entry) => ({ params: { locale: localeFromId(entry.id), slug: entrySlug(entry) }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const locale = localeFromId(entry.id);
+const { Content, headings } = await render(entry);
+---
+<ReaderLayout locale={locale} title={entry.data.title} description={entry.data.description} image={entryImage(entry.data)} headings={headings} meta={`${formatDate(contentDate(entry.data), locale)} · ${entry.data.author}`}>
+  <Content />
+</ReaderLayout>

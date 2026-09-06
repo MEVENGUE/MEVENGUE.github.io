@@ -1,0 +1,44 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { Locale } from '@/i18n';
+import { t } from '@/i18n';
+interface Heading { depth: number; slug: string; text: string }
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  image?: string;
+  headings?: Heading[];
+  meta?: string;
+}
+const { locale, title, description, image, headings = [], meta = '' } = Astro.props;
+---
+<BaseLayout locale={locale} title={title} description={description} image={image} article>
+  <div class="reading-progress" data-progress></div>
+  <header class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">{meta}</p>
+      <h1>{title}</h1>
+      <p class="lead">{description}</p>
+    </div>
+  </header>
+  <div class="wrap section prose-layout">
+    <article class="prose"><slot /></article>
+    {headings.length > 0 && (
+      <aside class="toc">
+        <p class="eyebrow">{t(locale).contents}</p>
+        <ul>{headings.filter((h) => h.depth <= 3).map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+      </aside>
+    )}
+  </div>
+  <div class="wrap"><slot name="after" /></div>
+  <script>
+    const progress = document.querySelector<HTMLElement>('[data-progress]');
+    const update = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      if (progress) progress.style.width = `${Math.max(0, Math.min(100, scrollY / max * 100))}%`;
+    };
+    addEventListener('scroll', update, { passive: true });
+    update();
+  </script>
+</BaseLayout>

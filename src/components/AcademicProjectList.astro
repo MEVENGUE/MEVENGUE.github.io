@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Locale } from '@/i18n';
+import { entryImage, entrySlug } from '@/lib/content';
+import { withBase } from '@/lib/url';
+
+const { entries, locale, compact = false } = Astro.props as {
+  entries: CollectionEntry<'projects'>[];
+  locale: Locale;
+  compact?: boolean;
+};
+---
+<div class:list={['academic-list', { compact }]}>
+  {entries.map((entry, index) => {
+    const firstDocument = entry.data.documents[0];
+    const fallback = withBase(entry.data.school?.includes('SUPINFO') ? '/assets/school-supinfo-paris.png' : '/assets/school-ecam-epmi.png');
+    const image = entry.data.cover ? entryImage(entry.data) : fallback;
+    return (
+      <article class="academic-project">
+        <a class="academic-visual" href={withBase(`/${locale}/work/${entrySlug(entry)}/`)} aria-label={entry.data.title}>
+          <img src={image} alt="" loading="lazy" />
+          <span>{String(index + 1).padStart(2, '0')}</span>
+        </a>
+        <div class="academic-copy">
+          <p class="meta">{entry.data.school} · {entry.data.year} · {entry.data.category}</p>
+          <h3><a href={withBase(`/${locale}/work/${entrySlug(entry)}/`)}>{entry.data.title}</a></h3>
+          {entry.data.subtitle && <p class="academic-subtitle">{entry.data.subtitle}</p>}
+          <p>{entry.data.description}</p>
+          <div class="academic-links">
+            <a href={withBase(`/${locale}/work/${entrySlug(entry)}/`)}>{locale === 'fr' ? 'Étude de cas' : 'Case study'}</a>
+            {firstDocument && <a href={withBase(firstDocument.url)} target="_blank" rel="noreferrer">{locale === 'fr' ? 'Rapport' : 'Report'}</a>}
+            {entry.data.documents.length > 1 && <a href={withBase(`/${locale}/work/${entrySlug(entry)}/#documents-title`)}>{entry.data.documents.length} {locale === 'fr' ? 'livrables' : 'documents'}</a>}
+            {entry.data.github && <a href={entry.data.github}>Code</a>}
+          </div>
+        </div>
+      </article>
+    );
+  })}
+</div>

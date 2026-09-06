@@ -1,0 +1,21 @@
+---
+import { withBase } from '@/lib/url';
+
+const defaultPath = withBase('/fr/');
+const englishPath = withBase('/en/');
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content={`0;url=${defaultPath}`} />
+    <link rel="canonical" href={new URL(defaultPath, Astro.site)} />
+    <title>Franck Mevengue</title>
+    <script is:inline define:vars={{ defaultPath, englishPath }}>
+      const locale = localStorage.getItem('fm-locale');
+      location.replace(locale === 'en' ? englishPath : defaultPath);
+    </script>
+  </head>
+  <body><a href={defaultPath}>Continuer en français</a></body>
+</html>

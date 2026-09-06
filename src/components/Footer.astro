@@ -1,0 +1,19 @@
+---
+import type { Locale } from '@/i18n';
+import { t } from '@/i18n';
+import { site } from '@/config/site';
+const { locale } = Astro.props as { locale: Locale };
+---
+<footer class="site-footer">
+  <div>
+    <p class="footer-name">{site.name}</p>
+    <p>{t(locale).footer}</p>
+    <p>{site.location}</p>
+  </div>
+  <div class="footer-links">
+    <a href={`mailto:${site.email}`}>Email</a>
+    <a href={site.github} rel="me">GitHub</a>
+    <a href={site.linkedin} rel="me">LinkedIn</a>
+    <span>© {new Date().getFullYear()}</span>
+  </div>
+</footer>

@@ -1,0 +1,31 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { localizedCollection, entrySlug } from '@/lib/content';
+import { locales, t, type Locale } from '@/i18n';
+import { withBase } from '@/lib/url';
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const copy = t(locale);
+const entries = await localizedCollection('docs', locale);
+---
+<BaseLayout locale={locale} title={copy.nav.docs}>
+  <header class="page-hero"><div class="wrap"><p class="eyebrow">05 · {copy.nav.docs}</p><h1>{locale === 'fr' ? 'Documentation technique' : 'Technical documentation'}</h1><p class="lead">{locale === 'fr' ? 'Guides et notes de référence consacrés aux outils, méthodes et configurations utilisés dans les projets.' : 'Reference guides and notes covering the tools, methods and configurations used across projects.'}</p></div></header>
+  <section class="section wrap">
+    <input class="search" type="search" data-doc-search placeholder={copy.search} aria-label={copy.search} />
+    <div class="doc-list" data-doc-list>
+      {entries.map((entry) => <a class="doc-item" href={withBase(`/${locale}/docs/${entrySlug(entry)}/`)} data-search={`${entry.data.title} ${entry.data.description} ${entry.data.tags.join(' ')}`.toLowerCase()}><h3>{entry.data.title}</h3><p>{entry.data.description}</p></a>)}
+      <p data-empty hidden>{copy.noResults}</p>
+    </div>
+  </section>
+  <script>
+    const input = document.querySelector<HTMLInputElement>('[data-doc-search]');
+    const items = [...document.querySelectorAll<HTMLElement>('[data-search]')];
+    const empty = document.querySelector<HTMLElement>('[data-empty]');
+    input?.addEventListener('input', () => {
+      const query = input.value.trim().toLowerCase();
+      let count = 0;
+      items.forEach((item) => { const show = item.dataset.search?.includes(query) ?? false; item.hidden = !show; if (show) count++; });
+      if (empty) empty.hidden = count !== 0;
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { ContentName } from '@/lib/content';
+import type { Locale } from '@/i18n';
+import { contentDate, entryImage, entrySlug, formatDate } from '@/lib/content';
+import { withBase } from '@/lib/url';
+
+interface Props {
+  entries: CollectionEntry<ContentName>[];
+  locale: Locale;
+  kind: ContentName;
+  filterable?: boolean;
+  filterBy?: 'tags' | 'category';
+}
+const { entries, locale, kind, filterable = false, filterBy = 'tags' } = Astro.props;
+const base = kind === 'projects' ? 'work' : kind === 'articles' ? 'journal' : 'docs';
+const filters = [...new Set(filterBy === 'category'
+  ? entries.map((entry) => 'category' in entry.data ? entry.data.category : undefined).filter(Boolean)
+  : entries.flatMap((entry) => entry.data.tags)
+)].sort() as string[];
+---
+{filterable && filters.length > 0 && (
+  <div class="filters" data-filters>
+    <button class="filter" data-filter="all" aria-pressed="true">{locale === 'fr' ? 'Tout' : 'All'}</button>
+    {filters.map((filter) => <button class="filter" data-filter={filter} aria-pressed="false">{filter}</button>)}
+  </div>
+)}
+<div class="cards" data-cards>
+  {entries.map((entry) => (
+    <a class="card" href={withBase(`/${locale}/${base}/${entrySlug(entry)}/`)} data-filter-values={filterBy === 'category' && 'category' in entry.data ? entry.data.category : entry.data.tags.join('|')}>
+      <div class="card-media" style={`--image: linear-gradient(180deg, transparent 25%, rgba(7,22,20,.96)), url("${entryImage(entry.data)}")`}></div>
+      <div class="card-content">
+        <p class="meta">
+          {'school' in entry.data && entry.data.school ? entry.data.school : formatDate(contentDate(entry.data), locale)}
+          {'category' in entry.data && entry.data.category ? ` · ${entry.data.category}` : ''}
+          {'year' in entry.data && entry.data.year ? ` · ${entry.data.year}` : ''}
+        </p>
+        <h3>{entry.data.title}</h3>
+        <p>{entry.data.description}</p>
+        {'documents' in entry.data && entry.data.documents.length > 0 && <span class="document-count">{String(entry.data.documents.length).padStart(2, '0')} {locale === 'fr' ? 'livrables en ligne' : 'online deliverables'}</span>}
+        <div class="tags">{entry.data.tags.slice(0, 4).map((tag) => <span class="tag">{tag}</span>)}</div>
+      </div>
+    </a>
+  ))}
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-filters]').forEach((filters) => {
+    const cards = filters.nextElementSibling?.querySelectorAll<HTMLElement>('[data-filter-values]');
+    filters.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((button) => {
+      button.addEventListener('click', () => {
+        filters.querySelectorAll('[data-filter]').forEach((item) => item.setAttribute('aria-pressed', 'false'));
+        button.setAttribute('aria-pressed', 'true');
+        cards?.forEach((card) => {
+          const match = button.dataset.filter === 'all' || card.dataset.filterValues?.split('|').includes(button.dataset.filter || '');
+          card.hidden = !match;
+        });
+      });
+    });
+  });
+</script>

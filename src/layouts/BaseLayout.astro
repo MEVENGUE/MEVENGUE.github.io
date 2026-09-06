@@ -1,0 +1,79 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import type { Locale } from '@/i18n';
+import { switchLocalePath, t } from '@/i18n';
+import { site } from '@/config/site';
+import { withBase } from '@/lib/url';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+}
+
+const {
+  locale,
+  title = `${site.name} — Cloud, Systems & Network Engineering`,
+  description = t(locale).heroText,
+  image = '/og.svg',
+  article = false,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternate = new URL(switchLocalePath(Astro.url.pathname, locale === 'fr' ? 'en' : 'fr'), Astro.site);
+const fullTitle = title.includes(site.name) ? title : `${title} — ${site.name}`;
+const socialImage = new URL(withBase(image), Astro.site);
+---
+<!doctype html>
+<html lang={locale} data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#FAF9F6" />
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={locale === 'fr' ? 'en' : 'fr'} href={alternate} />
+    <link rel="alternate" hreflang={locale} href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={new URL(withBase('/fr/'), Astro.site)} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <title>{fullTitle}</title>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      const savedTheme = localStorage.getItem('fm-theme');
+      if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t(locale).skip}</a>
+    <div class="site-grain" aria-hidden="true"></div>
+    <Header locale={locale} />
+    <main id="main"><slot /></main>
+    <Footer locale={locale} />
+    <script is:inline>
+      document.querySelector('[data-menu-button]')?.addEventListener('click', (event) => {
+        const button = event.currentTarget;
+        const menu = document.querySelector('[data-menu]');
+        const open = button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(open));
+        menu?.toggleAttribute('data-open', open);
+      });
+      document.querySelectorAll('[data-locale]').forEach((link) => link.addEventListener('click', () => {
+        localStorage.setItem('fm-locale', link.dataset.locale);
+      }));
+    </script>
+  </body>
+</html>

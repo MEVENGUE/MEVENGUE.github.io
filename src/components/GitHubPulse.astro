@@ -1,0 +1,42 @@
+---
+import type { Locale } from '@/i18n';
+const { locale } = Astro.props as { locale: Locale };
+---
+<section class="section github-pulse" aria-labelledby="github-title">
+  <div class="wrap">
+    <p class="eyebrow">06 · Open source / build in public</p>
+    <div class="section-head">
+      <div><h2 id="github-title">{locale === 'fr' ? 'Le laboratoire reste ouvert.' : 'The laboratory stays open.'}</h2></div>
+      <a href="https://github.com/MEVENGUE">GitHub ↗</a>
+    </div>
+    <div class="github-repos" data-github-repos aria-live="polite">
+      <a href="https://github.com/MEVENGUE/SUPFile-VB-App"><span class="meta">Pinned / Cloud</span><strong>SUPFile-VB-App</strong><p>{locale === 'fr' ? 'Infrastructure et application cloud multi-datacenter.' : 'Multi-datacenter cloud application and infrastructure.'}</p></a>
+      <div class="github-loading"><span class="meta">github.com/MEVENGUE</span><strong>{locale === 'fr' ? 'Chargement de l’activité publique…' : 'Loading public activity…'}</strong></div>
+    </div>
+  </div>
+</section>
+<script>
+  const container = document.querySelector<HTMLElement>('[data-github-repos]');
+  if (container) {
+    fetch('https://api.github.com/users/MEVENGUE/repos?sort=updated&per_page=4')
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((repos: Array<{ name: string; html_url: string; description: string | null; language: string | null; stargazers_count: number }>) => {
+        const dynamic = repos.filter((repo) => repo.name !== 'SUPFile-VB-App').slice(0, 2);
+        container.querySelector('.github-loading')?.remove();
+        dynamic.forEach((repo) => {
+          const link = document.createElement('a');
+          link.href = repo.html_url;
+          const meta = document.createElement('span');
+          meta.className = 'meta';
+          meta.textContent = `${repo.language || 'Repository'} · ${repo.stargazers_count} ★`;
+          const title = document.createElement('strong');
+          title.textContent = repo.name;
+          const description = document.createElement('p');
+          description.textContent = repo.description || 'Public engineering repository.';
+          link.append(meta, title, description);
+          container.append(link);
+        });
+      })
+      .catch(() => container.querySelector('.github-loading')?.remove());
+  }
+</script>

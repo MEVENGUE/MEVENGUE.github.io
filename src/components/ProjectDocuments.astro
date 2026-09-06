@@ -1,0 +1,111 @@
+---
+import type { Locale } from '@/i18n';
+import { withBase } from '@/lib/url';
+
+type ProjectDocument = {
+  title: string;
+  type: 'report' | 'presentation' | 'guide' | 'deliverable' | 'document';
+  url: string;
+  description?: string;
+};
+
+const { documents, locale, projectTitle } = Astro.props as {
+  documents: ProjectDocument[];
+  locale: Locale;
+  projectTitle: string;
+};
+
+const firstPdf = documents.find((document) => document.url.toLowerCase().endsWith('.pdf'));
+const labels = locale === 'fr'
+  ? { eyebrow: 'Documents du projet', title: 'Consulter les livrables.', intro: 'Rapports, présentations et guides originaux sont accessibles sans quitter l’étude de cas.', open: 'Ouvrir', download: 'Télécharger', unavailable: 'La prévisualisation PDF n’est pas disponible dans ce navigateur.' }
+  : { eyebrow: 'Project documents', title: 'Read the deliverables.', intro: 'Original reports, presentations and guides are available without leaving the case study.', open: 'Open', download: 'Download', unavailable: 'PDF preview is not available in this browser.' };
+---
+{documents.length > 0 && (
+  <section class="project-documents" aria-labelledby="documents-title" data-document-library>
+    <header class="document-heading">
+      <div>
+        <p class="eyebrow">{String(documents.length).padStart(2, '0')} · {labels.eyebrow}</p>
+        <h2 id="documents-title">{labels.title}</h2>
+      </div>
+      <p class="lead">{labels.intro}</p>
+    </header>
+
+    <div class="document-library">
+      <nav class="document-list" aria-label={labels.eyebrow}>
+        {documents.map((document, index) => {
+          const previewable = document.url.toLowerCase().endsWith('.pdf');
+          return (
+            <button
+              type="button"
+              class="document-tab"
+              data-document-tab
+              data-url={withBase(document.url)}
+              data-title={document.title}
+              data-previewable={String(previewable)}
+              aria-pressed={document.url === firstPdf?.url ? 'true' : 'false'}
+            >
+              <span class="document-index">{String(index + 1).padStart(2, '0')}</span>
+              <span><strong>{document.title}</strong><small>{document.type} · {previewable ? 'PDF' : 'MARKDOWN'}</small></span>
+              <span aria-hidden="true">↗</span>
+            </button>
+          );
+        })}
+      </nav>
+
+      <div class="document-stage">
+        {firstPdf ? (
+          <>
+            <div class="document-toolbar">
+              <strong data-document-title>{firstPdf.title}</strong>
+              <div>
+                <a data-document-open href={withBase(firstPdf.url)} target="_blank" rel="noreferrer">{labels.open} ↗</a>
+                <a data-document-download href={withBase(firstPdf.url)} download>{labels.download} ↓</a>
+              </div>
+            </div>
+            <object data-document-frame data={withBase(firstPdf.url)} type="application/pdf" aria-label={`${projectTitle} — ${firstPdf.title}`}>
+              <p>{labels.unavailable} <a href={withBase(firstPdf.url)}>{labels.open}</a></p>
+            </object>
+            <div class="document-external" data-document-external hidden>
+              <p>{locale === 'fr' ? 'Ce guide s’ouvre dans un nouvel onglet.' : 'This guide opens in a new tab.'}</p>
+              <a class="button primary" data-document-external-link href={withBase(firstPdf.url)} target="_blank" rel="noreferrer">{labels.open} ↗</a>
+            </div>
+          </>
+        ) : (
+          <div class="document-external">
+            <p>{locale === 'fr' ? 'Ces documents s’ouvrent dans un nouvel onglet.' : 'These documents open in a new tab.'}</p>
+            <a class="button primary" href={withBase(documents[0].url)} target="_blank" rel="noreferrer">{labels.open} ↗</a>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-document-library]').forEach((library) => {
+    const frame = library.querySelector<HTMLObjectElement>('[data-document-frame]');
+    const title = library.querySelector<HTMLElement>('[data-document-title]');
+    const open = library.querySelector<HTMLAnchorElement>('[data-document-open]');
+    const download = library.querySelector<HTMLAnchorElement>('[data-document-download]');
+    const external = library.querySelector<HTMLElement>('[data-document-external]');
+    const externalLink = library.querySelector<HTMLAnchorElement>('[data-document-external-link]');
+
+    library.querySelectorAll<HTMLButtonElement>('[data-document-tab]').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const url = tab.dataset.url || '';
+        const previewable = tab.dataset.previewable === 'true';
+        library.querySelectorAll('[data-document-tab]').forEach((item) => item.setAttribute('aria-pressed', 'false'));
+        tab.setAttribute('aria-pressed', 'true');
+        if (title) title.textContent = tab.dataset.title || '';
+        if (open) open.href = url;
+        if (download) download.href = url;
+        if (externalLink) externalLink.href = url;
+        if (frame) {
+          frame.hidden = !previewable;
+          if (previewable) frame.data = url;
+        }
+        if (external) external.hidden = previewable;
+      });
+    });
+  });
+</script>
