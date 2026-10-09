@@ -1,0 +1,70 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { locales, t, type Locale } from '@/i18n';
+import { site } from '@/config/site';
+import { withBase } from '@/lib/url';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+const locale = Astro.params.locale as Locale;
+const copy = t(locale);
+const book = site.book;
+const title = book.title[locale];
+const subtitle = book.subtitle[locale];
+const status = book.status[locale];
+---
+<BaseLayout locale={locale} title={copy.nav.books} description={subtitle}>
+  <header class="page-hero academic-page-hero">
+    <div class="wrap">
+      <p class="eyebrow">{copy.bookSection}</p>
+      <h1>{title}</h1>
+      <p class="lead">{subtitle}</p>
+      <p class="meta book-status">{status}</p>
+      <div class="quick-links">
+        <a href={withBase(book.pdf.fr)}>PDF FR</a>
+        <span>/</span>
+        <a href={withBase(book.pdf.en)}>PDF EN</a>
+        <span>/</span>
+        <a href={withBase(`/Livres/README${locale === 'en' ? '_EN' : ''}.md`)}>{locale === 'fr' ? 'Notes' : 'Notes'}</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section wrap book-page">
+    <div class="book-page-grid">
+      <article>
+        <h2>{locale === 'fr' ? 'L’idée' : 'The idea'}</h2>
+        <p>{locale === 'fr'
+          ? 'Le livre part d’une expérience de pensée : un Einstein contemporain confie ses traces intellectuelles à un assistant. Non pour le ressusciter, mais pour demander ce qu’un système pourrait réellement modéliser — et ce qu’il ne pourra jamais reconstituer.'
+          : 'The book starts from a thought experiment: a contemporary Einstein entrusts his intellectual traces to an assistant. Not to resurrect him, but to ask what a system could actually model — and what it could never reconstruct.'}</p>
+        <p>{locale === 'fr'
+          ? 'Cette question s’élargit ensuite au miroir collectif : nos traces numériques deviennent des données ; des modèles en tirent des représentations du monde. Le texte donne des outils pour distinguer ce qui est établi, inféré, hypothétique ou encore inconnu.'
+          : 'The question then expands to a collective mirror: our digital traces become data; models extract world representations from them. The text offers tools to distinguish what is established, inferred, hypothetical, or still unknown.'}</p>
+
+        <h2>{locale === 'fr' ? 'Ce que le livre refuse' : 'What the book refuses'}</h2>
+        <ul>
+          <li>{locale === 'fr' ? 'Confondre une personne avec les traces qu’elle laisse.' : 'Confusing a person with the traces they leave.'}</li>
+          <li>{locale === 'fr' ? 'Prendre une réponse fluide pour une preuve.' : 'Taking a fluent answer as proof.'}</li>
+          <li>{locale === 'fr' ? 'Présenter une simulation comme une identité ou une conscience.' : 'Presenting a simulation as an identity or a consciousness.'}</li>
+          <li>{locale === 'fr' ? 'Transformer un scénario conditionnel en prédiction.' : 'Turning a conditional scenario into a prediction.'}</li>
+        </ul>
+      </article>
+
+      <aside class="book-aside">
+        <h2>{locale === 'fr' ? 'Lire' : 'Read'}</h2>
+        <a class="button primary contact-primary" href={withBase(book.pdf[locale])}>{copy.readPdf} ↗</a>
+        <p class="meta">{locale === 'fr' ? 'Auteur' : 'Author'}</p>
+        <p>{site.name}</p>
+        <p class="meta">{locale === 'fr' ? 'Format' : 'Format'}</p>
+        <p>{locale === 'fr' ? 'Essai scientifique illustré · ~120 pages' : 'Illustrated scientific essay · ~120 pages'}</p>
+        <p class="meta">PDF</p>
+        <p>
+          <a href={withBase(book.pdf.fr)}>Français</a>
+          ·
+          <a href={withBase(book.pdf.en)}>English</a>
+        </p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

@@ -15,10 +15,9 @@ const supinfo = entries.filter((entry) => entry.data.school?.includes('SUPINFO')
 const documentCount = entries.reduce((total, entry) => total + entry.data.documents.length, 0);
 ---
 <BaseLayout locale={locale} title={copy.nav.work} description={copy.heroText}>
-  <header class="page-hero"><div class="wrap">
-    <p class="eyebrow">03 · {copy.nav.work}</p>
-    <h1>{locale === 'fr' ? 'Catalogue des projets' : 'Project catalogue'}</h1>
-    <p class="lead">{locale === 'fr' ? 'Projets académiques et personnels présentés avec leur contexte, leurs choix techniques et leurs livrables.' : 'Academic and personal projects presented with their context, technical decisions and deliverables.'}</p>
+  <header class="page-hero academic-page-hero"><div class="wrap">
+    <h1>{locale === 'fr' ? 'Projets' : 'Projects'}</h1>
+    <p class="lead">{locale === 'fr' ? 'Travaux académiques et personnels : contexte, choix techniques et livrables.' : 'Academic and personal work: context, technical decisions and deliverables.'}</p>
     <div class="catalog-summary">
       <div><strong>{entries.length}</strong><span>{locale === 'fr' ? 'projets' : 'projects'}</span></div>
       <div><strong>{documentCount}</strong><span>{locale === 'fr' ? 'documents' : 'documents'}</span></div>

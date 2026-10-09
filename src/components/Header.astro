@@ -6,27 +6,33 @@ import { withBase, withoutBase } from '@/lib/url';
 const { locale } = Astro.props as { locale: Locale };
 const copy = t(locale);
 const links = [
-  [withBase(`/${locale}/#about`), copy.nav.about],
-  [withBase(`/${locale}/#education`), locale === 'fr' ? 'Formation' : 'Education'],
+  [withBase(`/${locale}/`), copy.nav.about],
   [withBase(`/${locale}/work/`), copy.nav.work],
+  [withBase(`/${locale}/books/`), copy.nav.books],
   [withBase(`/${locale}/journal/`), copy.nav.journal],
   [withBase(`/${locale}/docs/`), copy.nav.docs],
   [withBase(`/${locale}/contact/`), copy.nav.contact],
 ];
 const alternate = locale === 'fr' ? 'en' : 'fr';
 const currentPath = withoutBase(Astro.url.pathname);
+const homePath = `/${locale}/`;
 ---
-<header class="site-header">
-  <a class="brand" href={withBase(`/${locale}/`)} aria-label={`${site.name} — ${locale === 'fr' ? 'Accueil' : 'Home'}`}>
+<header class="site-header academic-header">
+  <a class="brand" href={withBase(homePath)} aria-label={`${site.name} — ${locale === 'fr' ? 'Accueil' : 'Home'}`}>
     <span class="brand-mark">FM</span><span>{site.name}</span>
   </a>
   <button class="menu-button" type="button" data-menu-button aria-expanded="false" aria-label="Menu">
     <span></span><span></span>
   </button>
   <nav class="nav-glass" data-menu aria-label="Primary">
-    {links.map(([href, label]) => (
-      <a href={href} aria-current={!href.includes('#') && currentPath.startsWith(withoutBase(href)) ? 'page' : undefined}>{label}</a>
-    ))}
+    {links.map(([href, label]) => {
+      const path = withoutBase(href);
+      const isHome = path === homePath || path === `/${locale}`;
+      const current = isHome
+        ? currentPath === homePath || currentPath === `/${locale}`
+        : currentPath.startsWith(path);
+      return <a href={href} aria-current={current ? 'page' : undefined}>{label}</a>;
+    })}
     <a class="locale-switch" data-locale={alternate} href={switchLocalePath(Astro.url.pathname, alternate)}>
       {alternate.toUpperCase()}
     </a>

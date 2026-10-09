@@ -424,6 +424,106 @@
   }
 }
 
+/* Compact academic planet module */
+.planet-panel {
+  padding: clamp(2.5rem, 5vw, 3.5rem) 0 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.planet-panel .academic-section-head {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.planet-shell-compact {
+  position: relative;
+  width: 100%;
+  height: min(52vw, 340px);
+  min-height: 240px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background:
+    radial-gradient(ellipse at 70% 35%, rgba(52, 161, 143, 0.1), transparent 42%),
+    radial-gradient(ellipse at 40% 70%, rgba(201, 164, 92, 0.08), transparent 45%),
+    #fff;
+  box-shadow: 0 10px 30px rgba(23, 23, 23, 0.04);
+}
+
+.planet-shell-compact .planet-canvas,
+.planet-shell-compact .planet-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.planet-shell-compact .planet-fallback {
+  top: 50%;
+  right: 50%;
+  width: min(78%, 280px);
+  height: auto;
+  margin: 0;
+  opacity: 0.95;
+  transform: translate(50%, -50%);
+  filter: none;
+}
+
+.planet-webgl-ready .planet-fallback {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.planet-shell-compact .planet-labels,
+.planet-shell-compact .planet-hint {
+  display: none;
+}
+
+.planet-shell-compact .planet-controls {
+  right: 0.7rem;
+  bottom: 0.7rem;
+}
+
+.planet-directory-inline {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  max-height: none;
+  margin-top: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: none;
+}
+
+.planet-directory-inline h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+}
+
+.planet-directory-inline h3 button {
+  padding: 0;
+  color: var(--ink);
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (max-width: 720px) {
+  .planet-shell-compact {
+    height: min(78vw, 280px);
+    min-height: 200px;
+  }
+
+  .planet-directory-inline .planet-directory-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .planet-canvas,
   .planet-labels {
@@ -432,5 +532,9 @@
 
   .planet-fallback {
     opacity: 0.82;
+  }
+
+  .planet-shell-compact .planet-fallback {
+    opacity: 0.95;
   }
 }

@@ -9,7 +9,7 @@ const copy = t(locale);
 const entries = await localizedCollection('docs', locale);
 ---
 <BaseLayout locale={locale} title={copy.nav.docs}>
-  <header class="page-hero"><div class="wrap"><p class="eyebrow">05 · {copy.nav.docs}</p><h1>{locale === 'fr' ? 'Documentation technique' : 'Technical documentation'}</h1><p class="lead">{locale === 'fr' ? 'Guides et notes de référence consacrés aux outils, méthodes et configurations utilisés dans les projets.' : 'Reference guides and notes covering the tools, methods and configurations used across projects.'}</p></div></header>
+  <header class="page-hero academic-page-hero"><div class="wrap"><h1>{locale === 'fr' ? 'Documentation' : 'Docs'}</h1><p class="lead">{locale === 'fr' ? 'Guides et notes de référence issus des projets.' : 'Reference guides and notes from projects.'}</p></div></header>
   <section class="section wrap">
     <input class="search" type="search" data-doc-search placeholder={copy.search} aria-label={copy.search} />
     <div class="doc-list" data-doc-list>

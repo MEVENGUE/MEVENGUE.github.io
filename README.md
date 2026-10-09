@@ -1,21 +1,19 @@
 # Portfolio d’ingénierie — Franck Mevengue
 
-Portfolio académique bilingue consacré à mes travaux en cloud, systèmes, réseaux, DevOps, cybersécurité, données, IoT et électronique embarquée.
+Portfolio académique bilingue, conçu comme un profil GitHub personnel : bio, photo, news, formation, projets, livre et documentation.
 
-Le site transforme mon parcours ECAM EPMI et SUPINFO Paris en une archive technique consultable : études de cas, architectures, articles, documentation et livrables originaux sont réunis dans une expérience éditoriale interactive.
+Le parcours ECAM EPMI / SUPINFO Paris y est présenté avec études de cas, livrables PDF et un module discret de carte 3D des projets.
 
 [Visiter le portfolio](https://mevengue.github.io/)
 
 ## Expérience
 
-- Interface disponible en français et en anglais
-- Ville-planète 3D représentant 21 projets dans sept quartiers techniques
-- Catalogue organisé par établissement et domaine d’ingénierie
-- Études de cas détaillant contexte, architecture, mise en œuvre et résultats
-- Visualisation intégrée des rapports, présentations et autres livrables
-- Journal technique, base documentaire, catégories, tags, RSS et sitemap
-- Navigation accessible au clavier et alternative complète sans WebGL
-- Adaptation mobile, mouvement réduit et chargement différé de Three.js
+- Profil académique clair (inspiré des pages personnelles GitHub)
+- Français / anglais
+- Livre *Si Einstein avait eu ChatGPT* (PDF FR/EN)
+- 21 projets documentés, articles, docs, RSS et sitemap
+- Carte 3D discrète des projets (Three.js, fallback SVG)
+- Mobile, reduced-motion, navigation clavier
 
 ## Univers de la planète
 

@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import CelestialHero from '@/components/CelestialHero.astro';
+import PlanetPanel from '@/components/PlanetPanel.astro';
 import AcademicProjectList from '@/components/AcademicProjectList.astro';
 import { entrySlug, localizedCollection } from '@/lib/content';
-import { locales, type Locale } from '@/i18n';
+import { locales, t, type Locale } from '@/i18n';
 import { site } from '@/config/site';
 import { withBase } from '@/lib/url';
 import profilePhoto from '../../../photo_profil_cv.jpg';
@@ -12,63 +12,157 @@ export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
 }
 const locale = Astro.params.locale as Locale;
+const copy = t(locale);
 const projects = await localizedCollection('projects', locale);
 const articles = (await localizedCollection('articles', locale)).slice(0, 3);
 const docs = (await localizedCollection('docs', locale)).slice(0, 4);
 const byNumber = (a: typeof projects[number], b: typeof projects[number]) => Number(b.data.number || 0) - Number(a.data.number || 0);
 const selectedProjects = projects.filter((entry) => entry.data.featured).sort(byNumber).slice(0, 5);
+const book = site.book;
+const news = locale === 'fr'
+  ? [
+      ['Oct 2026', 'Publication du portfolio académique sur GitHub Pages.', withBase('/fr/')],
+      ['2025–2027', 'Master Systems & Networks — SUPINFO Paris.', withBase('/fr/#education')],
+      ['2025', 'Essai « Si Einstein avait eu ChatGPT » (version de travail).', withBase('/fr/books/')],
+      ['2025', 'Projets documentés : Supfile, NovaSys, MedSearchLab, Kubernetes Fleetman.', withBase('/fr/work/')],
+    ]
+  : [
+      ['Oct 2026', 'Academic portfolio published on GitHub Pages.', withBase('/en/')],
+      ['2025–2027', 'Master Systems & Networks — SUPINFO Paris.', withBase('/en/#education')],
+      ['2025', 'Essay “If Einstein Had Had ChatGPT” (working draft).', withBase('/en/books/')],
+      ['2025', 'Documented projects: Supfile, NovaSys, MedSearchLab, Kubernetes Fleetman.', withBase('/en/work/')],
+    ];
 ---
 <BaseLayout locale={locale}>
-  <CelestialHero locale={locale} />
-
-  <section class="section academic-profile" id="about">
-    <div class="wrap profile-intro">
-      <figure><img src={profilePhoto.src} width={profilePhoto.width} height={profilePhoto.height} alt={locale === 'fr' ? 'Portrait professionnel de Franck Mevengue' : 'Professional portrait of Franck Mevengue'} /></figure>
-      <div>
-        <p class="eyebrow">01 · {locale === 'fr' ? 'À propos' : 'About'}</p>
-        <h2>{site.name}</h2>
-        <p class="profile-role">{locale === 'fr' ? 'Étudiant ingénieur · Cloud, systèmes et réseaux' : 'Engineering student · Cloud, systems and networks'}</p>
-        <p class="profile-biography">{locale === 'fr'
-          ? 'Je construis des systèmes à l’intersection des infrastructures cloud, des réseaux, de l’automatisation et de la sécurité. Mon parcours relie la formation multidisciplinaire de l’ECAM EPMI au Master Systems & Networks de SUPINFO Paris.'
-          : 'I build systems at the intersection of cloud infrastructure, networks, automation and security. My journey connects multidisciplinary engineering at ECAM EPMI with the Systems & Networks Master’s path at SUPINFO Paris.'}</p>
-        <div class="academic-links profile-links">
-          <a href={`mailto:${site.email}`}>Email</a>
-          <a href={site.github}>GitHub</a>
-          <a href={site.linkedin}>LinkedIn</a>
-          <a href={withBase(`/${locale}/about/`)}>{locale === 'fr' ? 'Profil complet' : 'Full profile'}</a>
-        </div>
+  <section class="profile-hero wrap" id="about">
+    <div class="profile-hero-copy">
+      <h1>{site.name}</h1>
+      <p class="profile-role">{locale === 'fr'
+        ? 'Étudiant ingénieur · Cloud, systèmes et réseaux'
+        : 'Engineering student · Cloud, systems and networks'}</p>
+      <p class="profile-biography">{locale === 'fr'
+        ? 'Je construis et documente des systèmes à l’intersection des infrastructures cloud, des réseaux, de l’automatisation et de la sécurité. Mon parcours relie la formation multidisciplinaire de l’ECAM EPMI au Master Systems & Networks de SUPINFO Paris.'
+        : 'I build and document systems at the intersection of cloud infrastructure, networks, automation and security. My path connects multidisciplinary engineering at ECAM EPMI with the Systems & Networks Master’s programme at SUPINFO Paris.'}</p>
+      <p class="profile-biography">{locale === 'fr'
+        ? 'Ce site rassemble 21 projets vérifiables, des notes techniques, une documentation pratique et mon essai sur l’IA et la modélisation de la pensée.'
+        : 'This site gathers 21 verifiable projects, technical notes, practical documentation and my essay on AI and modelling thought.'}</p>
+      <div class="quick-links" aria-label={locale === 'fr' ? 'Liens rapides' : 'Quick links'}>
+        <a href={`mailto:${site.email}`}>Email</a>
+        <span>/</span>
+        <a href={site.github}>GitHub</a>
+        <span>/</span>
+        <a href={site.linkedin}>LinkedIn</a>
+        <span>/</span>
+        <a href={withBase(`/${locale}/books/`)}>{copy.nav.books}</a>
+        <span>/</span>
+        <a href={withBase(`/${locale}/about/`)}>{locale === 'fr' ? 'Profil complet' : 'Full profile'}</a>
       </div>
     </div>
+    <figure class="profile-hero-photo">
+      <img src={profilePhoto.src} width={profilePhoto.width} height={profilePhoto.height} alt={locale === 'fr' ? `Portrait de ${site.name}` : `Portrait of ${site.name}`} />
+    </figure>
   </section>
 
-  <section class="section education-section" id="education">
-    <div class="wrap">
-      <div class="academic-section-title"><p class="eyebrow">02 · {locale === 'fr' ? 'Formation' : 'Education'}</p><h2>{locale === 'fr' ? 'Parcours académique' : 'Academic journey'}</h2></div>
-      <div class="education-list">
-        <article><time>2025 — 2027</time><img src={withBase('/assets/school-supinfo-paris.png')} alt="SUPINFO Paris" /><div><h3>Master Systems & Networks</h3><p>SUPINFO Paris</p><span>{locale === 'fr' ? 'Cloud · Systèmes · Réseaux · DevOps · Cybersécurité' : 'Cloud · Systems · Networks · DevOps · Cybersecurity'}</span></div></article>
-        <article><time>{locale === 'fr' ? 'Cycle ingénieur' : 'Engineering cycle'}</time><img src={withBase('/assets/school-ecam-epmi.png')} alt="ECAM EPMI" /><div><h3>{locale === 'fr' ? 'Formation d’ingénieur multidisciplinaire' : 'Multidisciplinary engineering programme'}</h3><p>ECAM EPMI</p><span>{locale === 'fr' ? 'Informatique · Électronique · Embarqué · Cloud · Gestion de projet' : 'Software · Electronics · Embedded · Cloud · Project management'}</span></div></article>
-      </div>
+  <section class="section wrap" id="news">
+    <h2 class="academic-h2">{copy.news}</h2>
+    <ul class="news-list">
+      {news.map(([date, text, href]) => (
+        <li>
+          <span class="meta">{date}</span>
+          <a href={href}>{text}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section wrap" id="education">
+    <h2 class="academic-h2">{copy.education}</h2>
+    <div class="education-list academic-education">
+      <article>
+        <time>2025 — 2027</time>
+        <img src={withBase('/assets/school-supinfo-paris.png')} alt="SUPINFO Paris" />
+        <div>
+          <h3>Master Systems & Networks</h3>
+          <p>SUPINFO Paris</p>
+          <span>{locale === 'fr' ? 'Cloud · Systèmes · Réseaux · DevOps · Cybersécurité' : 'Cloud · Systems · Networks · DevOps · Cybersecurity'}</span>
+        </div>
+      </article>
+      <article>
+        <time>{locale === 'fr' ? 'Cycle ingénieur' : 'Engineering cycle'}</time>
+        <img src={withBase('/assets/school-ecam-epmi.png')} alt="ECAM EPMI" />
+        <div>
+          <h3>{locale === 'fr' ? 'Formation d’ingénieur multidisciplinaire' : 'Multidisciplinary engineering programme'}</h3>
+          <p>ECAM EPMI</p>
+          <span>{locale === 'fr' ? 'Informatique · Électronique · Embarqué · Cloud · Gestion de projet' : 'Software · Electronics · Embedded · Cloud · Project management'}</span>
+        </div>
+      </article>
     </div>
   </section>
 
   <section class="section wrap" id="projects">
-    <div class="academic-section-title"><p class="eyebrow">03 · {locale === 'fr' ? 'Projets' : 'Projects'}</p><h2>{locale === 'fr' ? 'Cinq projets sélectionnés' : 'Five selected projects'}</h2><p class="lead">{locale === 'fr' ? 'Une sélection de travaux en cloud, systèmes, réseaux, sécurité et logiciel, accompagnés de leurs livrables.' : 'A selection of cloud, systems, networking, security and software work, with supporting deliverables.'}</p></div>
+    <div class="academic-section-head">
+      <h2 class="academic-h2">{copy.selectedProjects}</h2>
+      <a class="text-cta" href={withBase(`/${locale}/work/`)}>{locale === 'fr' ? 'Catalogue complet →' : 'Full catalogue →'}</a>
+    </div>
     <AcademicProjectList entries={selectedProjects} locale={locale} />
-    <a class="text-cta catalog-link" href={withBase(`/${locale}/work/`)}>{locale === 'fr' ? 'Consulter le catalogue complet des projets' : 'Browse the complete project catalogue'} →</a>
   </section>
 
-  <section class="section academic-resources">
-    <div class="wrap resource-columns">
+  <section class="section wrap" id="book">
+    <h2 class="academic-h2">{copy.bookSection}</h2>
+    <article class="book-card">
+      <div>
+        <h3>{book.title[locale]}</h3>
+        <p>{book.subtitle[locale]}</p>
+        <p class="meta">{book.status[locale]}</p>
+        <div class="quick-links">
+          <a href={withBase(book.pdf[locale])}>{copy.readPdf}</a>
+          <span>/</span>
+          <a href={withBase(`/${locale}/books/`)}>{locale === 'fr' ? 'Page du livre' : 'Book page'}</a>
+          <span>/</span>
+          <a href={withBase(book.pdf.fr)}>FR</a>
+          <span>/</span>
+          <a href={withBase(book.pdf.en)}>EN</a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="section wrap academic-resources-inline">
+    <div class="resource-columns">
       <div id="articles">
-        <div class="academic-section-title"><p class="eyebrow">04 · {locale === 'fr' ? 'Articles' : 'Writing'}</p><h2>{locale === 'fr' ? 'Notes techniques' : 'Technical notes'}</h2></div>
-        <div class="academic-index-list">{articles.map((article, index) => <a href={withBase(`/${locale}/journal/${entrySlug(article)}/`)}><span>{String(index + 1).padStart(2, '0')}</span><div><strong>{article.data.title}</strong><small>{article.data.readingTime} · {article.data.tags.join(' · ')}</small></div><i>↗</i></a>)}</div>
-        <a class="text-cta" href={withBase(`/${locale}/journal/`)}>{locale === 'fr' ? 'Tous les articles' : 'All writing'} →</a>
+        <h2 class="academic-h2">{copy.writing}</h2>
+        <div class="academic-index-list">
+          {articles.map((article, index) => (
+            <a href={withBase(`/${locale}/journal/${entrySlug(article)}/`)}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <strong>{article.data.title}</strong>
+                <small>{article.data.readingTime} · {article.data.tags.join(' · ')}</small>
+              </div>
+              <i>↗</i>
+            </a>
+          ))}
+        </div>
+        <a class="text-cta" href={withBase(`/${locale}/journal/`)}>{locale === 'fr' ? 'Tous les articles →' : 'All writing →'}</a>
       </div>
       <div id="documentation">
-        <div class="academic-section-title"><p class="eyebrow">05 · Documentation</p><h2>{locale === 'fr' ? 'Archive pratique' : 'Practical archive'}</h2></div>
-        <div class="academic-index-list">{docs.map((doc, index) => <a href={withBase(`/${locale}/docs/${entrySlug(doc)}/`)}><span>{String(index + 1).padStart(2, '0')}</span><div><strong>{doc.data.title}</strong><small>{doc.data.readingTime} · {doc.data.tags.join(' · ')}</small></div><i>↗</i></a>)}</div>
-        <a class="text-cta" href={withBase(`/${locale}/docs/`)}>{locale === 'fr' ? 'Toute la documentation' : 'All documentation'} →</a>
+        <h2 class="academic-h2">{copy.documentation}</h2>
+        <div class="academic-index-list">
+          {docs.map((doc, index) => (
+            <a href={withBase(`/${locale}/docs/${entrySlug(doc)}/`)}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <strong>{doc.data.title}</strong>
+                <small>{doc.data.readingTime} · {doc.data.tags.join(' · ')}</small>
+              </div>
+              <i>↗</i>
+            </a>
+          ))}
+        </div>
+        <a class="text-cta" href={withBase(`/${locale}/docs/`)}>{locale === 'fr' ? 'Toute la documentation →' : 'All documentation →'}</a>
       </div>
     </div>
   </section>
+
+  <PlanetPanel locale={locale} />
 </BaseLayout>

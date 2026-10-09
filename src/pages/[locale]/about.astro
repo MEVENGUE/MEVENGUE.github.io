@@ -4,26 +4,76 @@ import { locales, t, type Locale } from '@/i18n';
 import { site } from '@/config/site';
 import { withBase } from '@/lib/url';
 import profilePhoto from '../../../photo_profil_cv.jpg';
-export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
 const locale = Astro.params.locale as Locale;
 const copy = t(locale);
-const schools = locale === 'fr'
-  ? [['2025 — 2027', 'SUPINFO Paris · Systems & Networks', 'Master orienté architecture cloud, systèmes, réseaux, sécurité et infrastructures distribuées.'], ['Cycle ingénieur', 'ECAM EPMI', 'Formation d’ingénieur multidisciplinaire : informatique, électronique, systèmes embarqués, cloud et gestion de projet.'], ['Projets', 'Travaux techniques documentés', 'Études de cas, architectures, implémentations et livrables issus de projets académiques et personnels.']]
-  : [['2025 — 2027', 'SUPINFO Paris · Systems & Networks', 'Master’s path focused on cloud architecture, systems, networks, security and distributed infrastructure.'], ['Engineering cycle', 'ECAM EPMI', 'Multidisciplinary engineering education spanning software, electronics, embedded systems, cloud and project management.'], ['Projects', 'Documented technical work', 'Case studies, architectures, implementations and deliverables from academic and personal projects.']];
-const skills = ['Cloud architecture', 'Systems', 'Networking', 'DevOps', 'DevSecOps', 'Automation', 'AI / Data', 'Embedded'];
+const book = site.book;
 ---
 <BaseLayout locale={locale} title={copy.nav.about}>
-  <header class="page-hero"><div class="wrap"><p class="eyebrow">01 · {copy.nav.about}</p><h1>{locale === 'fr' ? 'Parcours et compétences' : 'Background and skills'}</h1><p class="lead">{locale === 'fr' ? 'Formation en ingénierie, systèmes et réseaux, complétée par des projets en cloud, automatisation et sécurité.' : 'Engineering, systems and networking education supported by projects in cloud, automation and security.'}</p></div></header>
-  <section class="section wrap profile-grid">
-    <figure class="profile-portrait"><img src={profilePhoto.src} width={profilePhoto.width} height={profilePhoto.height} alt={locale === 'fr' ? `Portrait professionnel de ${site.name}` : `Professional portrait of ${site.name}`} /><figcaption>{site.name} · {site.location}</figcaption></figure>
-    <div>
-      <p class="eyebrow">{locale === 'fr' ? 'Formation et pratique' : 'Education and practice'}</p>
-      <div class="school-signatures"><img src={withBase('/assets/school-ecam-epmi.png')} alt="ECAM EPMI" loading="lazy" /><span>×</span><img src={withBase('/assets/school-supinfo-paris.png')} alt="SUPINFO Paris" loading="lazy" /></div>
-      <div class="timeline">{schools.map(([date, name, text], i) => <div class="timeline-item"><div class="school-logo">0{i + 1}</div><p class="meta">{date}</p><h3>{name}</h3><p class="lead">{text}</p></div>)}</div>
+  <header class="page-hero academic-page-hero">
+    <div class="wrap">
+      <h1>{site.name}</h1>
+      <p class="lead">{locale === 'fr'
+        ? 'Étudiant ingénieur en cloud, systèmes et réseaux. Je documente des architectures, des implémentations et des enseignements tirés de projets académiques.'
+        : 'Engineering student in cloud, systems and networks. I document architectures, implementations and lessons from academic projects.'}</p>
+      <div class="quick-links">
+        <a href={`mailto:${site.email}`}>Email</a>
+        <span>/</span>
+        <a href={site.github}>GitHub</a>
+        <span>/</span>
+        <a href={site.linkedin}>LinkedIn</a>
+        <span>/</span>
+        <a href={withBase(`/${locale}/books/`)}>{copy.nav.books}</a>
+      </div>
     </div>
-    <aside class="profile-skills">
-      <p class="eyebrow">{locale === 'fr' ? 'Domaines techniques' : 'Technical areas'}</p>
-      <div class="constellation">{skills.map((skill, i) => <span style={`--x:${8 + (i * 31) % 70}%;--y:${10 + (i * 47) % 72}%`}>{skill}</span>)}</div>
-    </aside>
+  </header>
+
+  <section class="section wrap profile-hero">
+    <div class="profile-hero-copy">
+      <h2 class="academic-h2">{locale === 'fr' ? 'Parcours' : 'Background'}</h2>
+      <p class="profile-biography">{locale === 'fr'
+        ? 'Mon parcours relie la formation multidisciplinaire de l’ECAM EPMI au Master Systems & Networks de SUPINFO Paris. Je travaille à l’intersection des infrastructures cloud, des réseaux, de l’automatisation, de la cybersécurité et des systèmes embarqués.'
+        : 'My path connects multidisciplinary engineering at ECAM EPMI with the Systems & Networks Master’s programme at SUPINFO Paris. I work at the intersection of cloud infrastructure, networks, automation, cybersecurity and embedded systems.'}</p>
+      <p class="profile-biography">{locale === 'fr'
+        ? `J’ai également écrit l’essai « ${book.title.fr} », une réflexion sur ce qu’un modèle peut inférer à partir de traces intellectuelles — et ce qu’il ne pourra jamais reconstituer.`
+        : `I also wrote the essay “${book.title.en}”, a reflection on what a model can infer from intellectual traces — and what it can never reconstruct.`}</p>
+    </div>
+    <figure class="profile-hero-photo">
+      <img src={profilePhoto.src} width={profilePhoto.width} height={profilePhoto.height} alt={locale === 'fr' ? `Portrait de ${site.name}` : `Portrait of ${site.name}`} />
+    </figure>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="academic-h2">{copy.education}</h2>
+    <div class="education-list academic-education">
+      <article>
+        <time>2025 — 2027</time>
+        <img src={withBase('/assets/school-supinfo-paris.png')} alt="SUPINFO Paris" />
+        <div>
+          <h3>Master Systems & Networks</h3>
+          <p>SUPINFO Paris</p>
+          <span>{locale === 'fr' ? 'Cloud · Systèmes · Réseaux · DevOps · Cybersécurité' : 'Cloud · Systems · Networks · DevOps · Cybersecurity'}</span>
+        </div>
+      </article>
+      <article>
+        <time>{locale === 'fr' ? 'Cycle ingénieur' : 'Engineering cycle'}</time>
+        <img src={withBase('/assets/school-ecam-epmi.png')} alt="ECAM EPMI" />
+        <div>
+          <h3>{locale === 'fr' ? 'Formation d’ingénieur multidisciplinaire' : 'Multidisciplinary engineering programme'}</h3>
+          <p>ECAM EPMI</p>
+          <span>{locale === 'fr' ? 'Informatique · Électronique · Embarqué · Cloud · Gestion de projet' : 'Software · Electronics · Embedded · Cloud · Project management'}</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="academic-h2">{locale === 'fr' ? 'Domaines' : 'Focus'}</h2>
+    <p class="lead">{locale === 'fr'
+      ? 'Cloud architecture · Systems · Networking · DevOps / DevSecOps · Automation · AI / Data · Embedded'
+      : 'Cloud architecture · Systems · Networking · DevOps / DevSecOps · Automation · AI / Data · Embedded'}</p>
   </section>
 </BaseLayout>
