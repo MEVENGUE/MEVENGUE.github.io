@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { locales, t, type Locale } from '@/i18n';
-import { site } from '@/config/site';
+import { site, type BookLang } from '@/config/site';
 import { withBase } from '@/lib/url';
 
 export function getStaticPaths() {
@@ -10,24 +10,44 @@ export function getStaticPaths() {
 const locale = Astro.params.locale as Locale;
 const copy = t(locale);
 const book = site.book;
+const defaultLang = (locale === 'en' ? 'en' : 'fr') as BookLang;
 const title = book.title[locale];
 const subtitle = book.subtitle[locale];
 const status = book.status[locale];
+const editions = book.languages.map((lang) => ({
+  ...lang,
+  title: book.title[lang.id],
+  subtitle: book.subtitle[lang.id],
+  pdf: withBase(book.pdf[lang.id]),
+}));
 ---
 <BaseLayout locale={locale} title={copy.nav.books} description={subtitle}>
   <header class="page-hero academic-page-hero">
-    <div class="wrap">
-      <p class="eyebrow">{copy.bookSection}</p>
-      <h1>{title}</h1>
-      <p class="lead">{subtitle}</p>
-      <p class="meta book-status">{status}</p>
-      <div class="quick-links">
-        <a href={withBase(book.pdf.fr)}>PDF FR</a>
-        <span>/</span>
-        <a href={withBase(book.pdf.en)}>PDF EN</a>
-        <span>/</span>
-        <a href={withBase(`/Livres/README${locale === 'en' ? '_EN' : ''}.md`)}>{locale === 'fr' ? 'Notes' : 'Notes'}</a>
+    <div class="wrap book-hero">
+      <div class="book-hero-copy">
+        <p class="eyebrow">{copy.bookSection}</p>
+        <h1>{title}</h1>
+        <p class="lead">{subtitle}</p>
+        <p class="meta book-status">{status}</p>
+        <div class="book-lang-switch" role="group" aria-label={copy.bookLangs} data-book-langs>
+          {editions.map((edition) => (
+            <button
+              type="button"
+              class="book-lang-btn"
+              data-book-lang={edition.id}
+              data-pdf={edition.pdf}
+              data-title={edition.title}
+              aria-pressed={edition.id === defaultLang ? 'true' : 'false'}
+            >
+              <span class="book-lang-short">{edition.short}</span>
+              <span class="book-lang-label">{edition.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
+      <figure class="book-cover">
+        <img src={withBase(book.cover)} width="480" height="720" alt={title} />
+      </figure>
     </div>
   </header>
 
@@ -53,18 +73,107 @@ const status = book.status[locale];
 
       <aside class="book-aside">
         <h2>{locale === 'fr' ? 'Lire' : 'Read'}</h2>
-        <a class="button primary contact-primary" href={withBase(book.pdf[locale])}>{copy.readPdf} ↗</a>
+        <a class="button primary contact-primary" data-book-open href={withBase(book.pdf[defaultLang])}>{copy.readPdf} ↗</a>
         <p class="meta">{locale === 'fr' ? 'Auteur' : 'Author'}</p>
         <p>{site.name}</p>
         <p class="meta">{locale === 'fr' ? 'Format' : 'Format'}</p>
-        <p>{locale === 'fr' ? 'Essai scientifique illustré · ~120 pages' : 'Illustrated scientific essay · ~120 pages'}</p>
-        <p class="meta">PDF</p>
-        <p>
-          <a href={withBase(book.pdf.fr)}>Français</a>
-          ·
-          <a href={withBase(book.pdf.en)}>English</a>
+        <p>{locale === 'fr' ? 'Essai scientifique illustré · ~120 pages · PDF' : 'Illustrated scientific essay · ~120 pages · PDF'}</p>
+        <p class="meta">{copy.bookLangs}</p>
+        <p class="book-aside-langs">
+          {editions.map((edition, index) => (
+            <>
+              {index > 0 && <span aria-hidden="true"> · </span>}
+              <a href={edition.pdf} data-book-lang-link={edition.id}>{edition.label}</a>
+            </>
+          ))}
         </p>
       </aside>
     </div>
   </section>
+
+  <section class="section wrap book-documents" aria-labelledby="book-preview-title" data-book-reader>
+    <header class="document-heading">
+      <div>
+        <p class="eyebrow">03 · {copy.bookLangs}</p>
+        <h2 id="book-preview-title">{copy.bookPreview}</h2>
+      </div>
+      <p class="lead">{locale === 'fr'
+        ? 'Choisissez la version française, anglaise ou chinoise, puis lisez directement dans le navigateur.'
+        : 'Choose the French, English or Chinese edition, then read it directly in the browser.'}</p>
+    </header>
+
+    <div class="document-library">
+      <nav class="document-list" aria-label={copy.bookLangs}>
+        {editions.map((edition, index) => (
+          <button
+            type="button"
+            class="document-tab"
+            data-book-tab
+            data-lang={edition.id}
+            data-url={edition.pdf}
+            data-title={edition.title}
+            aria-pressed={edition.id === defaultLang ? 'true' : 'false'}
+          >
+            <span class="document-index">{String(index + 1).padStart(2, '0')}</span>
+            <span>
+              <strong>{edition.label}</strong>
+              <small>{edition.short} · PDF · {edition.title}</small>
+            </span>
+            <span aria-hidden="true">↗</span>
+          </button>
+        ))}
+      </nav>
+
+      <div class="document-stage">
+        <div class="document-toolbar">
+          <strong data-book-title>{book.title[defaultLang]}</strong>
+          <div>
+            <a data-book-open-link href={withBase(book.pdf[defaultLang])} target="_blank" rel="noreferrer">{copy.bookOpen} ↗</a>
+            <a data-book-download href={withBase(book.pdf[defaultLang])} download>{copy.bookDownload} ↓</a>
+          </div>
+        </div>
+        <object data-book-frame data={withBase(book.pdf[defaultLang])} type="application/pdf" aria-label={`${title} — PDF`}>
+          <p>{copy.bookUnavailable} <a href={withBase(book.pdf[defaultLang])} data-book-fallback>{copy.bookOpen}</a></p>
+        </object>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<script>
+  const editions = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-book-tab]'));
+  const langButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-book-lang]'));
+  const frame = document.querySelector<HTMLObjectElement>('[data-book-frame]');
+  const titleEl = document.querySelector<HTMLElement>('[data-book-title]');
+  const openLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-book-open], [data-book-open-link], [data-book-fallback]'));
+  const downloadLink = document.querySelector<HTMLAnchorElement>('[data-book-download]');
+
+  function selectEdition(lang: string) {
+    const tab = editions.find((button) => button.dataset.lang === lang);
+    if (!tab) return;
+    const url = tab.dataset.url || '';
+    const title = tab.dataset.title || '';
+
+    editions.forEach((button) => button.setAttribute('aria-pressed', String(button === tab)));
+    langButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.bookLang === lang)));
+
+    if (frame) frame.setAttribute('data', url);
+    if (titleEl) titleEl.textContent = title;
+    openLinks.forEach((link) => { link.href = url; });
+    if (downloadLink) downloadLink.href = url;
+  }
+
+  editions.forEach((button) => {
+    button.addEventListener('click', () => selectEdition(button.dataset.lang || ''));
+  });
+  langButtons.forEach((button) => {
+    button.addEventListener('click', () => selectEdition(button.dataset.bookLang || ''));
+  });
+  document.querySelectorAll<HTMLAnchorElement>('[data-book-lang-link]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      selectEdition(link.dataset.bookLangLink || '');
+      document.querySelector('.book-documents')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>

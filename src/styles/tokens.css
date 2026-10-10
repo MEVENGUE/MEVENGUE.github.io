@@ -1,14 +1,14 @@
 :root {
-  --ivory: #faf9f6;
-  --paper: #ffffff;
-  --ink: #171717;
-  --ink-soft: #f1eee7;
-  --muted: #77736b;
-  --teal: #315f59;
-  --gold: #c9a45c;
-  --light-gold: #e8d8b0;
-  --line: #e9e4da;
-  --glass: rgba(255, 255, 255, 0.74);
+  --ivory: #f8f6f1;
+  --paper: #fffcf8;
+  --ink: #14120f;
+  --ink-soft: #f3efe6;
+  --muted: #6f6a61;
+  --teal: #2d5852;
+  --gold: #c29a4e;
+  --light-gold: #e9d7a8;
+  --line: #e5dfd2;
+  --glass: rgba(255, 252, 248, 0.78);
   --serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --sans: "Avenir Next", "Segoe UI", Arial, sans-serif;
   --mono: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
@@ -64,9 +64,10 @@ body::before {
   content: "";
   pointer-events: none;
   background:
-    radial-gradient(circle at 82% 8%, rgba(232, 216, 176, 0.48), transparent 28%),
-    radial-gradient(circle at 15% 65%, rgba(49, 95, 89, 0.06), transparent 34%),
-    linear-gradient(180deg, #fff 0, var(--ivory) 45%, #fff 100%);
+    radial-gradient(circle at 84% 6%, rgba(233, 215, 168, 0.55), transparent 30%),
+    radial-gradient(circle at 12% 72%, rgba(45, 88, 82, 0.08), transparent 36%),
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.7), transparent 42%),
+    linear-gradient(180deg, #fffefb 0, var(--ivory) 42%, #fff 100%);
 }
 
 a {

@@ -439,16 +439,18 @@
 .planet-shell-compact {
   position: relative;
   width: 100%;
-  height: min(52vw, 340px);
-  min-height: 240px;
+  height: min(62vw, 520px);
+  min-height: 360px;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--gold) 35%, var(--line));
+  border-radius: 1rem;
   background:
-    radial-gradient(ellipse at 70% 35%, rgba(52, 161, 143, 0.1), transparent 42%),
-    radial-gradient(ellipse at 40% 70%, rgba(201, 164, 92, 0.08), transparent 45%),
-    #fff;
-  box-shadow: 0 10px 30px rgba(23, 23, 23, 0.04);
+    radial-gradient(ellipse at 70% 35%, rgba(52, 161, 143, 0.14), transparent 42%),
+    radial-gradient(ellipse at 40% 70%, rgba(201, 164, 92, 0.12), transparent 45%),
+    linear-gradient(180deg, #fff 0%, #fbf8f1 100%);
+  box-shadow:
+    0 18px 48px rgba(23, 23, 23, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .planet-shell-compact .planet-canvas,
@@ -475,7 +477,10 @@
   pointer-events: none;
 }
 
-.planet-shell-compact .planet-labels,
+.planet-shell-compact .planet-labels {
+  opacity: 0.92;
+}
+
 .planet-shell-compact .planet-hint {
   display: none;
 }
@@ -515,8 +520,8 @@
 
 @media (max-width: 720px) {
   .planet-shell-compact {
-    height: min(78vw, 280px);
-    min-height: 200px;
+    height: min(88vw, 380px);
+    min-height: 280px;
   }
 
   .planet-directory-inline .planet-directory-grid {

@@ -35,9 +35,15 @@ const copy = {
     writing: 'Articles',
     documentation: 'Documentation',
     projectMap: 'Carte des projets',
-    projectMapLead: 'Vue discrète des 21 travaux, organisés par domaine. La liste ci-dessous reste le moyen le plus fiable d’ouvrir un projet.',
+    projectMapLead: '21 travaux, organisés par domaine. La liste ci-dessous reste le moyen le plus fiable d’ouvrir un projet.',
     bookSection: 'Livre',
     readPdf: 'Lire le PDF',
+    bookLangs: 'Versions disponibles',
+    bookPreview: 'Aperçu du PDF',
+    bookOpen: 'Ouvrir',
+    bookDownload: 'Télécharger',
+    bookUnavailable: 'La prévisualisation PDF n’est pas disponible dans ce navigateur.',
+
     planet: {
       ariaLabel: 'Carte interactive des 21 projets. Faites glisser pour tourner, utilisez la molette ou pincez pour zoomer.',
       instruction: 'GLISSER · ZOOMER · ESPACE',
@@ -91,9 +97,15 @@ const copy = {
     writing: 'Writing',
     documentation: 'Documentation',
     projectMap: 'Project map',
-    projectMapLead: 'A discreet view of the 21 works, organized by domain. The list below remains the most reliable way to open a project.',
+    projectMapLead: '21 works, organized by domain. The list below remains the most reliable way to open a project.',
     bookSection: 'Book',
     readPdf: 'Read PDF',
+    bookLangs: 'Available versions',
+    bookPreview: 'PDF preview',
+    bookOpen: 'Open',
+    bookDownload: 'Download',
+    bookUnavailable: 'PDF preview is not available in this browser.',
+
     planet: {
       ariaLabel: 'Interactive map of 21 projects. Drag to rotate, use the wheel or pinch to zoom.',
       instruction: 'DRAG · ZOOM · SPACE',

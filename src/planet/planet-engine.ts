@@ -31,14 +31,14 @@ export async function createPlanetEngine(options: EngineOptions): Promise<Planet
   const compact = root.classList.contains('planet-shell-compact');
   const mobile = matchMedia('(max-width: 900px), (max-height: 740px), (pointer: coarse)').matches;
   const lowPower = compact || mobile || (navigator.hardwareConcurrency || 8) <= 4;
-  const quality = compact ? 0.45 : lowPower ? 0.62 : 1;
+  const quality = compact ? 0.72 : lowPower ? 0.62 : 1;
   const renderer = new THREE.WebGLRenderer({
     canvas,
     alpha: true,
-    antialias: !lowPower,
+    antialias: !lowPower || compact,
     powerPreference: 'high-performance',
   });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, compact ? 1.1 : mobile ? 1.25 : 1.75));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, compact ? 1.4 : mobile ? 1.25 : 1.75));
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -46,7 +46,7 @@ export async function createPlanetEngine(options: EngineOptions): Promise<Planet
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 80);
-  camera.position.set(0, 0.25, compact ? 7.8 : mobile ? 8.2 : 7.35);
+  camera.position.set(0, 0.25, compact ? 6.9 : mobile ? 8.2 : 7.35);
   const world = new THREE.Group();
   world.rotation.set(-0.14, -0.42, 0.04);
   scene.add(world);

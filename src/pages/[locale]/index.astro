@@ -21,15 +21,15 @@ const selectedProjects = projects.filter((entry) => entry.data.featured).sort(by
 const book = site.book;
 const news = locale === 'fr'
   ? [
-      ['Oct 2026', 'Publication du portfolio académique sur GitHub Pages.', withBase('/fr/')],
+      ['Oct 2026', 'Mise à jour portfolio GitHub académique.', withBase('/fr/')],
       ['2025–2027', 'Master Systems & Networks — SUPINFO Paris.', withBase('/fr/#education')],
-      ['2025', 'Essai « Si Einstein avait eu ChatGPT » (version de travail).', withBase('/fr/books/')],
+      ['2026', 'Essai « Si Einstein avait eu ChatGPT » (version de travail).', withBase('/fr/books/')],
       ['2025', 'Projets documentés : Supfile, NovaSys, MedSearchLab, Kubernetes Fleetman.', withBase('/fr/work/')],
     ]
   : [
-      ['Oct 2026', 'Academic portfolio published on GitHub Pages.', withBase('/en/')],
+      ['Oct 2026', 'Academic GitHub portfolio update.', withBase('/en/')],
       ['2025–2027', 'Master Systems & Networks — SUPINFO Paris.', withBase('/en/#education')],
-      ['2025', 'Essay “If Einstein Had Had ChatGPT” (working draft).', withBase('/en/books/')],
+      ['2026', 'Essay “If Einstein Had Had ChatGPT” (working draft).', withBase('/en/books/')],
       ['2025', 'Documented projects: Supfile, NovaSys, MedSearchLab, Kubernetes Fleetman.', withBase('/en/work/')],
     ];
 ---
@@ -109,19 +109,22 @@ const news = locale === 'fr'
 
   <section class="section wrap" id="book">
     <h2 class="academic-h2">{copy.bookSection}</h2>
-    <article class="book-card">
+    <article class="book-card book-card-visual">
+      <a class="book-card-cover" href={withBase(`/${locale}/books/`)} aria-label={book.title[locale]}>
+        <img src={withBase(book.cover)} width="480" height="720" alt="" />
+      </a>
       <div>
         <h3>{book.title[locale]}</h3>
         <p>{book.subtitle[locale]}</p>
         <p class="meta">{book.status[locale]}</p>
         <div class="quick-links">
-          <a href={withBase(book.pdf[locale])}>{copy.readPdf}</a>
+          <a href={withBase(`/${locale}/books/`)}>{copy.readPdf}</a>
           <span>/</span>
-          <a href={withBase(`/${locale}/books/`)}>{locale === 'fr' ? 'Page du livre' : 'Book page'}</a>
+          <a href={withBase(book.pdf.fr)}>Français</a>
           <span>/</span>
-          <a href={withBase(book.pdf.fr)}>FR</a>
+          <a href={withBase(book.pdf.en)}>English</a>
           <span>/</span>
-          <a href={withBase(book.pdf.en)}>EN</a>
+          <a href={withBase(book.pdf.zh)}>中文</a>
         </div>
       </div>
     </article>
