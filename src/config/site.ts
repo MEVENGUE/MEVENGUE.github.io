@@ -6,7 +6,11 @@ export const site = {
   deepwiki: 'https://deepwiki.com/MEVENGUE/MEVENGUE',
   location: 'Paris, France',
   book: {
-    cover: '/assets/book-cover.svg',
+    cover: {
+      fr: '/Livres/cover-fr.jpg',
+      en: '/Livres/cover-en.jpg',
+      zh: '/Livres/cover-zh.jpg',
+    },
     title: {
       fr: 'Si Einstein avait eu ChatGPT',
       en: 'If Einstein Had Had ChatGPT',

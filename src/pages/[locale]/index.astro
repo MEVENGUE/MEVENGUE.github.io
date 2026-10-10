@@ -2,7 +2,6 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PlanetPanel from '@/components/PlanetPanel.astro';
 import AcademicProjectList from '@/components/AcademicProjectList.astro';
-import BookCover from '@/components/BookCover.astro';
 import { entrySlug, localizedCollection } from '@/lib/content';
 import { locales, t, type Locale } from '@/i18n';
 import { site } from '@/config/site';
@@ -112,7 +111,7 @@ const news = locale === 'fr'
     <h2 class="academic-h2">{copy.bookSection}</h2>
     <article class="book-card book-card-visual">
       <a class="book-card-cover" href={withBase(`/${locale}/books/`)} aria-label={book.title[locale]}>
-        <BookCover title={book.title[locale]} class="book-cover-art" />
+        <img src={withBase(book.cover[locale])} width="960" height="1440" alt={book.title[locale]} loading="lazy" />
       </a>
       <div>
         <h3>{book.title[locale]}</h3>

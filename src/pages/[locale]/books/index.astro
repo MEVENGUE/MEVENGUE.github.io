@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import BookCover from '@/components/BookCover.astro';
 import { locales, t, type Locale } from '@/i18n';
 import { site, type BookLang } from '@/config/site';
 import { withBase } from '@/lib/url';
@@ -20,7 +19,9 @@ const editions = book.languages.map((lang) => ({
   title: book.title[lang.id],
   subtitle: book.subtitle[lang.id],
   pdf: withBase(book.pdf[lang.id]),
+  cover: withBase(book.cover[lang.id]),
 }));
+const defaultEdition = editions.find((edition) => edition.id === defaultLang) ?? editions[0];
 ---
 <BaseLayout locale={locale} title={copy.nav.books} description={subtitle}>
   <header class="page-hero academic-page-hero">
@@ -37,6 +38,7 @@ const editions = book.languages.map((lang) => ({
               class="book-lang-btn"
               data-book-lang={edition.id}
               data-pdf={edition.pdf}
+              data-cover={edition.cover}
               data-title={edition.title}
               aria-pressed={edition.id === defaultLang ? 'true' : 'false'}
             >
@@ -47,7 +49,13 @@ const editions = book.languages.map((lang) => ({
         </div>
       </div>
       <figure class="book-cover">
-        <BookCover title={title} class="book-cover-art" />
+        <img
+          data-book-cover
+          src={defaultEdition.cover}
+          width="960"
+          height="1440"
+          alt={title}
+        />
       </figure>
     </div>
   </header>
@@ -74,7 +82,7 @@ const editions = book.languages.map((lang) => ({
 
       <aside class="book-aside">
         <h2>{locale === 'fr' ? 'Lire' : 'Read'}</h2>
-        <a class="button primary contact-primary" data-book-open href={withBase(book.pdf[defaultLang])}>{copy.readPdf} ↗</a>
+        <a class="button primary contact-primary" data-book-open href={defaultEdition.pdf}>{copy.readPdf} ↗</a>
         <p class="meta">{locale === 'fr' ? 'Auteur' : 'Author'}</p>
         <p>{site.name}</p>
         <p class="meta">{locale === 'fr' ? 'Format' : 'Format'}</p>
@@ -103,7 +111,7 @@ const editions = book.languages.map((lang) => ({
         : 'Choose the French, English or Chinese edition, then read it directly in the browser.'}</p>
     </header>
 
-    <div class="document-library">
+    <div class="document-library book-library">
       <nav class="document-list" aria-label={copy.bookLangs}>
         {editions.map((edition, index) => (
           <button
@@ -112,6 +120,7 @@ const editions = book.languages.map((lang) => ({
             data-book-tab
             data-lang={edition.id}
             data-url={edition.pdf}
+            data-cover={edition.cover}
             data-title={edition.title}
             aria-pressed={edition.id === defaultLang ? 'true' : 'false'}
           >
@@ -125,17 +134,29 @@ const editions = book.languages.map((lang) => ({
         ))}
       </nav>
 
-      <div class="document-stage">
+      <div class="document-stage book-stage">
         <div class="document-toolbar">
-          <strong data-book-title>{book.title[defaultLang]}</strong>
+          <strong data-book-title>{defaultEdition.title}</strong>
           <div>
-            <a data-book-open-link href={withBase(book.pdf[defaultLang])} target="_blank" rel="noreferrer">{copy.bookOpen} ↗</a>
-            <a data-book-download href={withBase(book.pdf[defaultLang])} download>{copy.bookDownload} ↓</a>
+            <a data-book-open-link href={defaultEdition.pdf} target="_blank" rel="noreferrer">{copy.bookOpen} ↗</a>
+            <a data-book-download href={defaultEdition.pdf} download>{copy.bookDownload} ↓</a>
           </div>
         </div>
-        <object data-book-frame data={withBase(book.pdf[defaultLang])} type="application/pdf" aria-label={`${title} — PDF`}>
-          <p>{copy.bookUnavailable} <a href={withBase(book.pdf[defaultLang])} data-book-fallback>{copy.bookOpen}</a></p>
-        </object>
+        <div class="book-viewer">
+          <iframe
+            data-book-frame
+            src={`${defaultEdition.pdf}#view=FitH&toolbar=1`}
+            title={`${title} — PDF`}
+            loading="lazy"
+          ></iframe>
+          <img
+            class="book-viewer-fallback"
+            data-book-fallback-cover
+            src={defaultEdition.cover}
+            alt={title}
+            hidden
+          />
+        </div>
       </div>
     </div>
   </section>
@@ -144,21 +165,32 @@ const editions = book.languages.map((lang) => ({
 <script>
   const editions = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-book-tab]'));
   const langButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-book-lang]'));
-  const frame = document.querySelector<HTMLObjectElement>('[data-book-frame]');
+  const frame = document.querySelector<HTMLIFrameElement>('[data-book-frame]');
+  const coverImg = document.querySelector<HTMLImageElement>('[data-book-cover]');
+  const fallbackCover = document.querySelector<HTMLImageElement>('[data-book-fallback-cover]');
   const titleEl = document.querySelector<HTMLElement>('[data-book-title]');
-  const openLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-book-open], [data-book-open-link], [data-book-fallback]'));
+  const openLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-book-open], [data-book-open-link]'));
   const downloadLink = document.querySelector<HTMLAnchorElement>('[data-book-download]');
 
   function selectEdition(lang: string) {
     const tab = editions.find((button) => button.dataset.lang === lang);
     if (!tab) return;
     const url = tab.dataset.url || '';
+    const cover = tab.dataset.cover || '';
     const title = tab.dataset.title || '';
 
     editions.forEach((button) => button.setAttribute('aria-pressed', String(button === tab)));
     langButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.bookLang === lang)));
 
-    if (frame) frame.setAttribute('data', url);
+    if (frame) frame.src = `${url}#view=FitH&toolbar=1`;
+    if (coverImg) {
+      coverImg.src = cover;
+      coverImg.alt = title;
+    }
+    if (fallbackCover) {
+      fallbackCover.src = cover;
+      fallbackCover.alt = title;
+    }
     if (titleEl) titleEl.textContent = title;
     openLinks.forEach((link) => { link.href = url; });
     if (downloadLink) downloadLink.href = url;
@@ -177,4 +209,10 @@ const editions = book.languages.map((lang) => ({
       document.querySelector('.book-documents')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+
+  if (frame) {
+    frame.addEventListener('error', () => {
+      if (fallbackCover) fallbackCover.hidden = false;
+    });
+  }
 </script>
