@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import BookCover from '@/components/BookCover.astro';
 import { locales, t, type Locale } from '@/i18n';
 import { site, type BookLang } from '@/config/site';
 import { withBase } from '@/lib/url';
@@ -46,7 +47,7 @@ const editions = book.languages.map((lang) => ({
         </div>
       </div>
       <figure class="book-cover">
-        <img src={withBase(book.cover)} width="480" height="720" alt={title} />
+        <BookCover title={title} class="book-cover-art" />
       </figure>
     </div>
   </header>

@@ -24,6 +24,8 @@ const copy = t(locale);
         <span>/</span>
         <a href={site.github}>GitHub</a>
         <span>/</span>
+        <a href={site.deepwiki} target="_blank" rel="noreferrer">DeepWiki</a>
+        <span>/</span>
         <a href={withBase(`/${locale}/books/`)}>{copy.nav.books}</a>
       </div>
     </div>
@@ -41,6 +43,7 @@ const copy = t(locale);
       <a href={`mailto:${site.email}`}><span>Email</span><strong>{site.email}</strong><i>↗</i></a>
       <a href={site.linkedin} rel="me"><span>LinkedIn</span><strong>{locale === 'fr' ? 'Profil professionnel' : 'Professional profile'}</strong><i>↗</i></a>
       <a href={site.github} rel="me"><span>GitHub</span><strong>MEVENGUE</strong><i>↗</i></a>
+      <a href={site.deepwiki} target="_blank" rel="noreferrer"><span>DeepWiki</span><strong>{locale === 'fr' ? 'Documentation du dépôt' : 'Repository documentation'}</strong><i>↗</i></a>
       <div><span>{locale === 'fr' ? 'Localisation' : 'Location'}</span><strong>{site.location}</strong></div>
     </div>
   </section>

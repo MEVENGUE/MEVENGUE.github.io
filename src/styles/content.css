@@ -1280,8 +1280,8 @@
 
 .book-card-visual {
   display: grid;
-  grid-template-columns: 132px minmax(0, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: 176px minmax(0, 1fr);
+  gap: 1.75rem;
   align-items: center;
 }
 
@@ -1317,7 +1317,7 @@
 
 .book-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(180px, 240px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(220px, 300px);
   gap: clamp(1.5rem, 4vw, 3rem);
   align-items: end;
 }
@@ -1333,10 +1333,13 @@
     0 0 0 1px color-mix(in srgb, var(--gold) 25%, transparent);
 }
 
-.book-cover img {
+.book-cover img,
+.book-cover-art,
+.book-card-cover .book-cover-art {
+  display: block;
   width: 100%;
   aspect-ratio: 2 / 3;
-  object-fit: cover;
+  height: auto;
 }
 
 .book-lang-switch {
@@ -1467,7 +1470,7 @@
 
   .book-card-cover,
   .book-cover {
-    max-width: 180px;
+    max-width: 220px;
   }
 
   .academic-section-head {

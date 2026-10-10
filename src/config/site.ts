@@ -3,6 +3,7 @@ export const site = {
   email: 'mevengueengofranck@gmail.com',
   linkedin: 'https://www.linkedin.com/in/franck-mevengue-839028207/',
   github: 'https://github.com/MEVENGUE',
+  deepwiki: 'https://deepwiki.com/MEVENGUE/MEVENGUE',
   location: 'Paris, France',
   book: {
     cover: '/assets/book-cover.svg',
