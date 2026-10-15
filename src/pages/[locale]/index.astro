@@ -18,18 +18,20 @@ const articles = (await localizedCollection('articles', locale)).slice(0, 3);
 const docs = (await localizedCollection('docs', locale)).slice(0, 4);
 const byNumber = (a: typeof projects[number], b: typeof projects[number]) => Number(b.data.number || 0) - Number(a.data.number || 0);
 const selectedProjects = projects.filter((entry) => entry.data.featured).sort(byNumber).slice(0, 5);
-const book = site.book;
+const books = site.books;
 const news = locale === 'fr'
   ? [
       ['Oct 2026', 'Mise à jour portfolio GitHub académique.', withBase('/fr/')],
+      ['2026', 'Essai « La souveraineté cloud européenne » (FR · EN · ZH).', withBase('/fr/books/souverainete-cloud-europeenne/')],
+      ['2026', 'Essai « Si Einstein avait eu ChatGPT » (version de travail).', withBase('/fr/books/si-einstein-avait-eu-chatgpt/')],
       ['2025–2027', 'Master Systems & Networks — SUPINFO Paris.', withBase('/fr/#education')],
-      ['2026', 'Essai « Si Einstein avait eu ChatGPT » (version de travail).', withBase('/fr/books/')],
       ['2025', 'Projets documentés : Supfile, NovaSys, MedSearchLab, Kubernetes Fleetman.', withBase('/fr/work/')],
     ]
   : [
       ['Oct 2026', 'Academic GitHub portfolio update.', withBase('/en/')],
+      ['2026', 'Essay “European Cloud Sovereignty” (FR · EN · ZH).', withBase('/en/books/souverainete-cloud-europeenne/')],
+      ['2026', 'Essay “If Einstein Had Had ChatGPT” (working draft).', withBase('/en/books/si-einstein-avait-eu-chatgpt/')],
       ['2025–2027', 'Master Systems & Networks — SUPINFO Paris.', withBase('/en/#education')],
-      ['2026', 'Essay “If Einstein Had Had ChatGPT” (working draft).', withBase('/en/books/')],
       ['2025', 'Documented projects: Supfile, NovaSys, MedSearchLab, Kubernetes Fleetman.', withBase('/en/work/')],
     ];
 ---
@@ -108,26 +110,33 @@ const news = locale === 'fr'
   </section>
 
   <section class="section wrap" id="book">
-    <h2 class="academic-h2">{copy.bookSection}</h2>
-    <article class="book-card book-card-visual">
-      <a class="book-card-cover" href={withBase(`/${locale}/books/`)} aria-label={book.title[locale]}>
-        <img src={withBase(book.cover[locale])} width="960" height="1440" alt={book.title[locale]} loading="lazy" />
-      </a>
-      <div>
-        <h3>{book.title[locale]}</h3>
-        <p>{book.subtitle[locale]}</p>
-        <p class="meta">{book.status[locale]}</p>
-        <div class="quick-links">
-          <a href={withBase(`/${locale}/books/`)}>{copy.readPdf}</a>
-          <span>/</span>
-          <a href={withBase(book.pdf.fr)}>Français</a>
-          <span>/</span>
-          <a href={withBase(book.pdf.en)}>English</a>
-          <span>/</span>
-          <a href={withBase(book.pdf.zh)}>中文</a>
-        </div>
-      </div>
-    </article>
+    <div class="academic-section-head">
+      <h2 class="academic-h2">{copy.bookSection}</h2>
+      <a class="text-cta" href={withBase(`/${locale}/books/`)}>{locale === 'fr' ? 'Tous les livres →' : 'All books →'}</a>
+    </div>
+    <div class="books-catalog">
+      {books.map((book) => (
+        <article class="book-card book-card-visual">
+          <a class="book-card-cover" href={withBase(`/${locale}/books/${book.slug}/`)} aria-label={book.title[locale]}>
+            <img src={withBase(book.cover[locale])} width="960" height="1440" alt={book.title[locale]} loading="lazy" />
+          </a>
+          <div>
+            <h3>{book.title[locale]}</h3>
+            <p>{book.subtitle[locale]}</p>
+            <p class="meta">{book.status[locale]}</p>
+            <div class="quick-links">
+              <a href={withBase(`/${locale}/books/${book.slug}/`)}>{copy.readPdf}</a>
+              <span>/</span>
+              <a href={withBase(book.pdf.fr)}>Français</a>
+              <span>/</span>
+              <a href={withBase(book.pdf.en)}>English</a>
+              <span>/</span>
+              <a href={withBase(book.pdf.zh)}>中文</a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
   </section>
 
   <section class="section wrap academic-resources-inline">

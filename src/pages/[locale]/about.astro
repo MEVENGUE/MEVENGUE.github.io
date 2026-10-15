@@ -10,7 +10,7 @@ export function getStaticPaths() {
 }
 const locale = Astro.params.locale as Locale;
 const copy = t(locale);
-const book = site.book;
+const [sovereignty, einstein] = site.books;
 ---
 <BaseLayout locale={locale} title={copy.nav.about}>
   <header class="page-hero academic-page-hero">
@@ -38,8 +38,8 @@ const book = site.book;
         ? 'Mon parcours relie la formation multidisciplinaire de l’ECAM EPMI au Master Systems & Networks de SUPINFO Paris. Je travaille à l’intersection des infrastructures cloud, des réseaux, de l’automatisation, de la cybersécurité et des systèmes embarqués.'
         : 'My path connects multidisciplinary engineering at ECAM EPMI with the Systems & Networks Master’s programme at SUPINFO Paris. I work at the intersection of cloud infrastructure, networks, automation, cybersecurity and embedded systems.'}</p>
       <p class="profile-biography">{locale === 'fr'
-        ? `J’ai également écrit l’essai « ${book.title.fr} », une réflexion sur ce qu’un modèle peut inférer à partir de traces intellectuelles — et ce qu’il ne pourra jamais reconstituer.`
-        : `I also wrote the essay “${book.title.en}”, a reflection on what a model can infer from intellectual traces — and what it can never reconstruct.`}</p>
+        ? `J’ai également écrit deux essais : « ${sovereignty.title.fr} », sur les capacités qui fondent l’autonomie numérique européenne, et « ${einstein.title.fr} », une réflexion sur ce qu’un modèle peut inférer à partir de traces intellectuelles — et ce qu’il ne pourra jamais reconstituer.`
+        : `I also wrote two essays: “${sovereignty.title.en}”, on the capabilities that underpin European digital autonomy, and “${einstein.title.en}”, a reflection on what a model can infer from intellectual traces — and what it can never reconstruct.`}</p>
     </div>
     <figure class="profile-hero-photo">
       <img src={profilePhoto.src} width={profilePhoto.width} height={profilePhoto.height} alt={locale === 'fr' ? `Portrait de ${site.name}` : `Portrait of ${site.name}`} />

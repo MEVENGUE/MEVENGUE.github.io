@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { locales, t, type Locale } from '@/i18n';
-import { site, type BookLang } from '@/config/site';
+import { site } from '@/config/site';
 import { withBase } from '@/lib/url';
 
 export function getStaticPaths() {
@@ -9,210 +9,46 @@ export function getStaticPaths() {
 }
 const locale = Astro.params.locale as Locale;
 const copy = t(locale);
-const book = site.book;
-const defaultLang = (locale === 'en' ? 'en' : 'fr') as BookLang;
-const title = book.title[locale];
-const subtitle = book.subtitle[locale];
-const status = book.status[locale];
-const editions = book.languages.map((lang) => ({
-  ...lang,
-  title: book.title[lang.id],
-  subtitle: book.subtitle[lang.id],
-  pdf: withBase(book.pdf[lang.id]),
-  cover: withBase(book.cover[lang.id]),
-}));
-const defaultEdition = editions.find((edition) => edition.id === defaultLang) ?? editions[0];
+const books = site.books;
 ---
-<BaseLayout locale={locale} title={copy.nav.books} description={subtitle}>
+<BaseLayout
+  locale={locale}
+  title={copy.nav.books}
+  description={locale === 'fr'
+    ? 'Essais de Franck Mevengue : souveraineté cloud européenne et IA.'
+    : 'Essays by Franck Mevengue: European cloud sovereignty and AI.'}
+>
   <header class="page-hero academic-page-hero">
-    <div class="wrap book-hero">
-      <div class="book-hero-copy">
-        <p class="eyebrow">{copy.bookSection}</p>
-        <h1>{title}</h1>
-        <p class="lead">{subtitle}</p>
-        <p class="meta book-status">{status}</p>
-        <div class="book-lang-switch" role="group" aria-label={copy.bookLangs} data-book-langs>
-          {editions.map((edition) => (
-            <button
-              type="button"
-              class="book-lang-btn"
-              data-book-lang={edition.id}
-              data-pdf={edition.pdf}
-              data-cover={edition.cover}
-              data-title={edition.title}
-              aria-pressed={edition.id === defaultLang ? 'true' : 'false'}
-            >
-              <span class="book-lang-short">{edition.short}</span>
-              <span class="book-lang-label">{edition.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-      <figure class="book-cover">
-        <img
-          data-book-cover
-          src={defaultEdition.cover}
-          width="960"
-          height="1440"
-          alt={title}
-        />
-      </figure>
+    <div class="wrap">
+      <p class="eyebrow">{copy.bookSection}</p>
+      <h1>{copy.nav.books}</h1>
+      <p class="lead">{locale === 'fr'
+        ? 'Deux essais en français, anglais et chinois — à lire comme des livres, avec PDF et aperçu intégré.'
+        : 'Two essays in French, English and Chinese — to be read as books, with PDF and embedded preview.'}</p>
     </div>
   </header>
 
-  <section class="section wrap book-page">
-    <div class="book-page-grid">
-      <article>
-        <h2>{locale === 'fr' ? 'L’idée' : 'The idea'}</h2>
-        <p>{locale === 'fr'
-          ? 'Le livre part d’une expérience de pensée : un Einstein contemporain confie ses traces intellectuelles à un assistant. Non pour le ressusciter, mais pour demander ce qu’un système pourrait réellement modéliser — et ce qu’il ne pourra jamais reconstituer.'
-          : 'The book starts from a thought experiment: a contemporary Einstein entrusts his intellectual traces to an assistant. Not to resurrect him, but to ask what a system could actually model — and what it could never reconstruct.'}</p>
-        <p>{locale === 'fr'
-          ? 'Cette question s’élargit ensuite au miroir collectif : nos traces numériques deviennent des données ; des modèles en tirent des représentations du monde. Le texte donne des outils pour distinguer ce qui est établi, inféré, hypothétique ou encore inconnu.'
-          : 'The question then expands to a collective mirror: our digital traces become data; models extract world representations from them. The text offers tools to distinguish what is established, inferred, hypothetical, or still unknown.'}</p>
-
-        <h2>{locale === 'fr' ? 'Ce que le livre refuse' : 'What the book refuses'}</h2>
-        <ul>
-          <li>{locale === 'fr' ? 'Confondre une personne avec les traces qu’elle laisse.' : 'Confusing a person with the traces they leave.'}</li>
-          <li>{locale === 'fr' ? 'Prendre une réponse fluide pour une preuve.' : 'Taking a fluent answer as proof.'}</li>
-          <li>{locale === 'fr' ? 'Présenter une simulation comme une identité ou une conscience.' : 'Presenting a simulation as an identity or a consciousness.'}</li>
-          <li>{locale === 'fr' ? 'Transformer un scénario conditionnel en prédiction.' : 'Turning a conditional scenario into a prediction.'}</li>
-        </ul>
-      </article>
-
-      <aside class="book-aside">
-        <h2>{locale === 'fr' ? 'Lire' : 'Read'}</h2>
-        <a class="button primary contact-primary" data-book-open href={defaultEdition.pdf}>{copy.readPdf} ↗</a>
-        <p class="meta">{locale === 'fr' ? 'Auteur' : 'Author'}</p>
-        <p>{site.name}</p>
-        <p class="meta">{locale === 'fr' ? 'Format' : 'Format'}</p>
-        <p>{locale === 'fr' ? 'Essai scientifique illustré · ~120 pages · PDF' : 'Illustrated scientific essay · ~120 pages · PDF'}</p>
-        <p class="meta">{copy.bookLangs}</p>
-        <p class="book-aside-langs">
-          {editions.map((edition, index) => (
-            <>
-              {index > 0 && <span aria-hidden="true"> · </span>}
-              <a href={edition.pdf} data-book-lang-link={edition.id}>{edition.label}</a>
-            </>
-          ))}
-        </p>
-      </aside>
-    </div>
-  </section>
-
-  <section class="section wrap book-documents" aria-labelledby="book-preview-title" data-book-reader>
-    <header class="document-heading">
-      <div>
-        <p class="eyebrow">03 · {copy.bookLangs}</p>
-        <h2 id="book-preview-title">{copy.bookPreview}</h2>
-      </div>
-      <p class="lead">{locale === 'fr'
-        ? 'Choisissez la version française, anglaise ou chinoise, puis lisez directement dans le navigateur.'
-        : 'Choose the French, English or Chinese edition, then read it directly in the browser.'}</p>
-    </header>
-
-    <div class="document-library book-library">
-      <nav class="document-list" aria-label={copy.bookLangs}>
-        {editions.map((edition, index) => (
-          <button
-            type="button"
-            class="document-tab"
-            data-book-tab
-            data-lang={edition.id}
-            data-url={edition.pdf}
-            data-cover={edition.cover}
-            data-title={edition.title}
-            aria-pressed={edition.id === defaultLang ? 'true' : 'false'}
-          >
-            <span class="document-index">{String(index + 1).padStart(2, '0')}</span>
-            <span>
-              <strong>{edition.label}</strong>
-              <small>{edition.short} · PDF · {edition.title}</small>
-            </span>
-            <span aria-hidden="true">↗</span>
-          </button>
-        ))}
-      </nav>
-
-      <div class="document-stage book-stage">
-        <div class="document-toolbar">
-          <strong data-book-title>{defaultEdition.title}</strong>
-          <div>
-            <a data-book-open-link href={defaultEdition.pdf} target="_blank" rel="noreferrer">{copy.bookOpen} ↗</a>
-            <a data-book-download href={defaultEdition.pdf} download>{copy.bookDownload} ↓</a>
+  <section class="section wrap books-catalog">
+    {books.map((book) => (
+      <article class="book-card book-card-visual">
+        <a class="book-card-cover" href={withBase(`/${locale}/books/${book.slug}/`)} aria-label={book.title[locale]}>
+          <img src={withBase(book.cover[locale])} width="960" height="1440" alt={book.title[locale]} loading="lazy" />
+        </a>
+        <div>
+          <p class="meta">{book.year} · {book.status[locale]}</p>
+          <h2>{book.title[locale]}</h2>
+          <p>{book.subtitle[locale]}</p>
+          <div class="quick-links">
+            <a href={withBase(`/${locale}/books/${book.slug}/`)}>{locale === 'fr' ? 'Ouvrir la page' : 'Open page'}</a>
+            <span>/</span>
+            <a href={withBase(book.pdf.fr)}>Français</a>
+            <span>/</span>
+            <a href={withBase(book.pdf.en)}>English</a>
+            <span>/</span>
+            <a href={withBase(book.pdf.zh)}>中文</a>
           </div>
         </div>
-        <div class="book-viewer">
-          <iframe
-            data-book-frame
-            src={`${defaultEdition.pdf}#view=FitH&toolbar=1`}
-            title={`${title} — PDF`}
-            loading="lazy"
-          ></iframe>
-          <img
-            class="book-viewer-fallback"
-            data-book-fallback-cover
-            src={defaultEdition.cover}
-            alt={title}
-            hidden
-          />
-        </div>
-      </div>
-    </div>
+      </article>
+    ))}
   </section>
 </BaseLayout>
-
-<script>
-  const editions = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-book-tab]'));
-  const langButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-book-lang]'));
-  const frame = document.querySelector<HTMLIFrameElement>('[data-book-frame]');
-  const coverImg = document.querySelector<HTMLImageElement>('[data-book-cover]');
-  const fallbackCover = document.querySelector<HTMLImageElement>('[data-book-fallback-cover]');
-  const titleEl = document.querySelector<HTMLElement>('[data-book-title]');
-  const openLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-book-open], [data-book-open-link]'));
-  const downloadLink = document.querySelector<HTMLAnchorElement>('[data-book-download]');
-
-  function selectEdition(lang: string) {
-    const tab = editions.find((button) => button.dataset.lang === lang);
-    if (!tab) return;
-    const url = tab.dataset.url || '';
-    const cover = tab.dataset.cover || '';
-    const title = tab.dataset.title || '';
-
-    editions.forEach((button) => button.setAttribute('aria-pressed', String(button === tab)));
-    langButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.bookLang === lang)));
-
-    if (frame) frame.src = `${url}#view=FitH&toolbar=1`;
-    if (coverImg) {
-      coverImg.src = cover;
-      coverImg.alt = title;
-    }
-    if (fallbackCover) {
-      fallbackCover.src = cover;
-      fallbackCover.alt = title;
-    }
-    if (titleEl) titleEl.textContent = title;
-    openLinks.forEach((link) => { link.href = url; });
-    if (downloadLink) downloadLink.href = url;
-  }
-
-  editions.forEach((button) => {
-    button.addEventListener('click', () => selectEdition(button.dataset.lang || ''));
-  });
-  langButtons.forEach((button) => {
-    button.addEventListener('click', () => selectEdition(button.dataset.bookLang || ''));
-  });
-  document.querySelectorAll<HTMLAnchorElement>('[data-book-lang-link]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      selectEdition(link.dataset.bookLangLink || '');
-      document.querySelector('.book-documents')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-
-  if (frame) {
-    frame.addEventListener('error', () => {
-      if (fallbackCover) fallbackCover.hidden = false;
-    });
-  }
-</script>

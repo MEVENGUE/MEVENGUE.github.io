@@ -1326,10 +1326,24 @@
   color: var(--teal);
 }
 
+.books-catalog {
+  display: grid;
+  gap: 0;
+}
+
 .book-card {
   padding: 1.4rem 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+}
+
+.books-catalog .book-card + .book-card {
+  border-top: 0;
+}
+
+.books-catalog .book-card h2 {
+  margin: 0.35rem 0 0.55rem;
+  font: 500 1.45rem/1.25 var(--serif);
 }
 
 .book-card-visual {
