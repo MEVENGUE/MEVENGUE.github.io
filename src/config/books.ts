@@ -32,7 +32,7 @@ export const books: Book[] = [
       en: 'Essay · FR · EN · ZH editions · 2026',
     },
     title: {
-      fr: 'La souveraineté cloud européenne',
+      fr: 'La souveraineté du cloud européen',
       en: 'European Cloud Sovereignty',
       zh: '欧洲云主权',
     },

@@ -1,4 +1,4 @@
-# La souveraineté cloud européenne  
+# La souveraineté du cloud européen  
 ## European Cloud Sovereignty · 欧洲云主权
 
 **Auteur / Author / 作者 :** Franck Mevengue  
@@ -47,7 +47,7 @@ livre final/
 
 | | Français | English | 中文 |
 |--|----------|---------|------|
-| **Titre** | La souveraineté cloud européenne | European Cloud Sovereignty | 欧洲云主权 |
+| **Titre** | La souveraineté du cloud européen | European Cloud Sovereignty | 欧洲云主权 |
 | **Sous-titre** | Les capacités humaines, économiques, technologiques et industrielles qui déterminent l’autonomie numérique de l’Europe | The human, economic, technological and industrial capabilities that shape Europe’s digital autonomy | 决定欧洲数字自主的人文、经济、技术与产业能力 |
 | **Auteur** | Franck Mevengue | Franck Mevengue | Franck Mevengue |
 | **Genre** | Essai / non-fiction technologique | Technology essay | 技术随笔 / 非虚构 |
