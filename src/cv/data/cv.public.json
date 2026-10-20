@@ -1,0 +1,225 @@
+{
+  "version": "1.1.0",
+  "approvals": {
+    "email": true,
+    "phone": false,
+    "location": true,
+    "linkedin": true,
+    "github": true,
+    "portrait": false
+  },
+  "identity": {
+    "name": "Franck Mevengue"
+  },
+  "headline": {
+    "fr": "Architecture Cloud, systèmes et réseaux, SAP / Systèmes d’information — Processus métier • Analyse • Coordination IT",
+    "en": "Cloud architecture, systems and networks, SAP / Information systems — Business processes • Analysis • IT coordination"
+  },
+  "availability": {
+    "fr": "Master Architecture Cloud, Systèmes & Réseaux — SUPINFO Paris · Stage 6 mois · disponible dès janvier 2027 · Paris",
+    "en": "Master’s in Cloud Architecture, Systems & Networks — SUPINFO Paris · 6-month internship · available from January 2027 · Paris"
+  },
+  "summary": {
+    "fr": "Étudiant en Master 2 Architecture Cloud, Systèmes & Réseaux à SUPINFO Paris, je possède une expérience en environnement SAP acquise chez Iliade Consulting. J’y ai contribué à l’automatisation de traitements avec Python et ABAP, à la qualification d’anomalies et à la formalisation de procédures. Rigoureux et à l’aise dans les échanges entre interlocuteurs fonctionnels et techniques, je souhaite contribuer au programme FOCUS sur le suivi des demandes d’accès, la traçabilité des tickets et l’amélioration des processus d’autorisations SAP.",
+    "en": "Master’s student in Cloud Architecture, Systems & Networks at SUPINFO Paris, with SAP experience gained at Iliade Consulting. I contributed to process automation with Python and ABAP, defect qualification and procedure formalization. Rigorous and at ease between business and technical stakeholders, I aim to contribute to the FOCUS programme on access-request follow-up, ticket traceability and SAP authorization process improvement."
+  },
+  "contacts": {
+    "email": "mevengueengofranck@gmail.com",
+    "phone": "[PHONE_PUBLIC_APPROVED]",
+    "location": "Paris",
+    "linkedin": "https://www.linkedin.com/in/franck-mevengue-839028207/",
+    "github": "https://github.com/MEVENGUE",
+    "portfolio": "https://mevengue.github.io/"
+  },
+  "skills": [
+    {
+      "label": { "fr": "SAP et processus métier", "en": "SAP and business processes" },
+      "items": ["Environnement SAP", "Automatisation Python/ABAP", "Compréhension des processus", "Qualification d’anomalies"]
+    },
+    {
+      "label": { "fr": "Suivi opérationnel", "en": "Operational follow-up" },
+      "items": ["Traçabilité", "Suivi jusqu’à validation", "Documentation des procédures", "Communication métier-IT"]
+    },
+    {
+      "label": { "fr": "Analyse et qualité", "en": "Analysis and quality" },
+      "items": ["Diagnostic", "Analyse de logs", "Tests", "Vérification des corrections", "Rigueur"]
+    },
+    {
+      "label": { "fr": "Outils", "en": "Tools" },
+      "items": ["Git", "Python", "ABAP", "FastAPI", "PostgreSQL", "Power Platform"]
+    },
+    {
+      "label": { "fr": "Bureautique", "en": "Office" },
+      "items": ["Outils bureautiques", "Notions d’Excel"]
+    },
+    {
+      "label": { "fr": "À approfondir", "en": "To develop further" },
+      "items": ["SAP S/4HANA", "Fiori", "Business Catalogs", "Rôles et autorisations SAP", "Excel avancé"]
+    }
+  ],
+  "experience": [
+    {
+      "period": "10 mois",
+      "title": {
+        "fr": "Consultant fonctionnel SAP",
+        "en": "SAP functional consultant"
+      },
+      "org": "Iliade Consulting",
+      "place": "Environnement client RTE",
+      "bullets": {
+        "fr": [
+          "Traitements SAP : automatisation de processus métier avec Python et ABAP sur des données opérationnelles.",
+          "Analyse et résolution : qualification d’anomalies, vérification des corrections et suivi jusqu’à validation.",
+          "Traçabilité et documentation : formalisation de procédures et synthèse des solutions mises en œuvre.",
+          "Coordination métier-IT : échanges fonctionnels et techniques pour clarifier les besoins et suivre les actions."
+        ],
+        "en": [
+          "SAP processing: business-process automation with Python and ABAP on operational data.",
+          "Analysis and resolution: defect qualification, correction checks and follow-up through validation.",
+          "Traceability and documentation: procedure formalization and solution summaries.",
+          "Business–IT coordination: functional and technical exchanges to clarify needs and track actions."
+        ]
+      }
+    },
+    {
+      "period": "3 mois",
+      "title": {
+        "fr": "Stagiaire développeur logiciel",
+        "en": "Software developer intern"
+      },
+      "org": "MEKMOTECH",
+      "place": "Noisy-le-Grand · plateforme SaaS CarbonDesk Pro",
+      "bullets": {
+        "fr": [
+          "Qualité : analyse de logs, reproduction d’anomalies, tests des évolutions et validation des corrections.",
+          "Documentation : documentation technique, Git et collaboration en équipe Agile.",
+          "Développement : services et API avec Python, FastAPI et PostgreSQL."
+        ],
+        "en": [
+          "Quality: log analysis, defect reproduction, change testing and correction validation.",
+          "Documentation: technical writing, Git and Agile teamwork.",
+          "Development: services and APIs with Python, FastAPI and PostgreSQL."
+        ]
+      }
+    },
+    {
+      "period": "2 mois",
+      "title": {
+        "fr": "Développeur web / administrateur WordPress",
+        "en": "Web developer / WordPress administrator"
+      },
+      "org": "Lannkin",
+      "place": "France · projet professionnel",
+      "bullets": {
+        "fr": [
+          "Support : diagnostic d’incidents, corrections applicatives et documentation des interventions."
+        ],
+        "en": [
+          "Support: incident diagnosis, application fixes and intervention documentation."
+        ]
+      }
+    }
+  ],
+  "projects": [
+    {
+      "name": "Microsoft Power Platform",
+      "year": "Projet académique",
+      "stack": "Power Apps · Power Automate · Power BI · Dataverse",
+      "summary": {
+        "fr": "Outils métier : applications, automatisation de workflows et reporting.",
+        "en": "Business tools: applications, workflow automation and reporting."
+      }
+    },
+    {
+      "name": "Pipeline CI/CD et ITIL",
+      "year": "Projet académique",
+      "stack": "Contrôle · Validation · Suivi · Documentation",
+      "summary": {
+        "fr": "Processus : étude des étapes de contrôle, de validation et de documentation des changements.",
+        "en": "Process: study of change control, validation and documentation steps."
+      }
+    },
+    {
+      "name": "AWS Capstone — Architecture cloud",
+      "year": "Projet académique",
+      "stack": "IAM · VPC · EC2 · S3",
+      "summary": {
+        "fr": "Accès : notions IAM et gestion des accès dans une architecture cloud.",
+        "en": "Access: IAM concepts and access management in a cloud architecture."
+      }
+    },
+    {
+      "name": "Conduite du changement",
+      "year": "Projet académique",
+      "stack": "ITSM · Parties prenantes · Communication",
+      "summary": {
+        "fr": "Coordination : sensibilisation à l’accompagnement des transformations IT.",
+        "en": "Coordination: awareness of supporting IT transformations."
+      }
+    }
+  ],
+  "education": [
+    {
+      "period": "",
+      "title": {
+        "fr": "Master Architecture Cloud, Systèmes & Réseaux",
+        "en": "Master’s in Cloud Architecture, Systems & Networks"
+      },
+      "school": "SUPINFO Paris",
+      "note": {
+        "fr": "Systèmes d’information, cloud, réseaux et processus.",
+        "en": "Information systems, cloud, networks and processes."
+      }
+    },
+    {
+      "period": "",
+      "title": {
+        "fr": "École d’ingénieur — Systèmes d’Information",
+        "en": "Engineering school — Information Systems"
+      },
+      "school": "ECAM-EPMI",
+      "note": {
+        "fr": "Développement, infrastructures, réseaux et sécurité.",
+        "en": "Development, infrastructure, networks and security."
+      }
+    },
+    {
+      "period": "",
+      "title": {
+        "fr": "Licence et Maîtrise E3A",
+        "en": "Bachelor’s and Master’s E3A"
+      },
+      "school": "CY Cergy Paris Université",
+      "note": {
+        "fr": "Double cursus, suivi en parallèle du cycle ingénieur ECAM-EPMI.",
+        "en": "Dual curriculum, pursued in parallel with the ECAM-EPMI engineering programme."
+      }
+    }
+  ],
+  "languages": [
+    {
+      "name": { "fr": "Français", "en": "French" },
+      "level": { "fr": "Natif", "en": "Native" }
+    },
+    {
+      "name": { "fr": "Anglais", "en": "English" },
+      "level": { "fr": "B2 — professionnel, écrit et oral", "en": "B2 — professional, written and spoken" }
+    }
+  ],
+  "engagement": [
+    {
+      "title": { "fr": "VivaTech 2026", "en": "VivaTech 2026" },
+      "detail": {
+        "fr": "Engagement événementiel.",
+        "en": "Event engagement."
+      }
+    },
+    {
+      "title": { "fr": "Robotium — ECAM-EPMI", "en": "Robotium — ECAM-EPMI" },
+      "detail": {
+        "fr": "Projet de robotique en équipe.",
+        "en": "Team robotics project."
+      }
+    }
+  ]
+}

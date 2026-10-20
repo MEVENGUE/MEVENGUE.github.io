@@ -9,6 +9,7 @@ const links = [
   [withBase(`/${locale}/`), copy.nav.about],
   [withBase(`/${locale}/work/`), copy.nav.work],
   [withBase(`/${locale}/books/`), copy.nav.books],
+  [withBase(`/${locale}/cv/`), copy.nav.cv],
   [withBase(`/${locale}/journal/`), copy.nav.journal],
   [withBase(`/${locale}/docs/`), copy.nav.docs],
   [withBase(`/${locale}/contact/`), copy.nav.contact],
@@ -16,25 +17,36 @@ const links = [
 const alternate = locale === 'fr' ? 'en' : 'fr';
 const currentPath = withoutBase(Astro.url.pathname);
 const homePath = `/${locale}/`;
+const menuLabel = locale === 'fr' ? 'Menu' : 'Menu';
 ---
 <header class="site-header academic-header">
-  <a class="brand" href={withBase(homePath)} aria-label={`${site.name} — ${locale === 'fr' ? 'Accueil' : 'Home'}`}>
-    <span class="brand-mark">FM</span><span>{site.name}</span>
-  </a>
-  <button class="menu-button" type="button" data-menu-button aria-expanded="false" aria-label="Menu">
-    <span></span><span></span>
-  </button>
-  <nav class="nav-glass" data-menu aria-label="Primary">
-    {links.map(([href, label]) => {
-      const path = withoutBase(href);
-      const isHome = path === homePath || path === `/${locale}`;
-      const current = isHome
-        ? currentPath === homePath || currentPath === `/${locale}`
-        : currentPath.startsWith(path);
-      return <a href={href} aria-current={current ? 'page' : undefined}>{label}</a>;
-    })}
-    <a class="locale-switch" data-locale={alternate} href={switchLocalePath(Astro.url.pathname, alternate)}>
-      {alternate.toUpperCase()}
+  <div class="site-header-inner">
+    <a class="brand" href={withBase(homePath)} aria-label={`${site.name} — ${locale === 'fr' ? 'Accueil' : 'Home'}`}>
+      <span class="brand-mark">FM</span>
+      <span class="brand-name">{site.name}</span>
     </a>
-  </nav>
+    <button
+      class="menu-button"
+      type="button"
+      data-menu-button
+      aria-expanded="false"
+      aria-controls="site-menu"
+      aria-label={menuLabel}
+    >
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-glass" id="site-menu" data-menu aria-label={locale === 'fr' ? 'Navigation principale' : 'Primary navigation'}>
+      {links.map(([href, label]) => {
+        const path = withoutBase(href);
+        const isHome = path === homePath || path === `/${locale}`;
+        const current = isHome
+          ? currentPath === homePath || currentPath === `/${locale}`
+          : currentPath.startsWith(path);
+        return <a href={href} aria-current={current ? 'page' : undefined}>{label}</a>;
+      })}
+      <a class="locale-switch" data-locale={alternate} href={switchLocalePath(Astro.url.pathname, alternate)} hreflang={alternate}>
+        {alternate.toUpperCase()}
+      </a>
+    </nav>
+  </div>
 </header>

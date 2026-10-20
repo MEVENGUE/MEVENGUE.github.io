@@ -1,0 +1,15 @@
+{
+  "_comment": "Copy to cv.private.json for local private CV generation only. Never commit cv.private.json. Never import this file from public frontend code.",
+  "phone": "[PHONE_PRIVATE]",
+  "email_private": "[EMAIL_PRIVATE]",
+  "address": {
+    "street": "[STREET_PRIVATE]",
+    "city": "[CITY_PRIVATE]",
+    "postal": "[POSTAL_PRIVATE]",
+    "country": "France"
+  },
+  "birth": {
+    "date": "[BIRTH_DATE_PRIVATE]",
+    "place": "[BIRTH_PLACE_PRIVATE]"
+  }
+}

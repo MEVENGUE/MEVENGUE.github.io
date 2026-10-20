@@ -7,12 +7,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "cv:privacy": "node scripts/cv-privacy-check.mjs",
+    "test:privacy": "node tests/privacy/cv-privacy.test.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "latest",
     "@astrojs/sitemap": "latest",
     "astro": "latest",
+    "html2canvas": "^1.4.1",
     "three": "latest"
   },
   "devDependencies": {

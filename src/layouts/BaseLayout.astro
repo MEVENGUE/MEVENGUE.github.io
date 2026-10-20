@@ -70,12 +70,15 @@ const socialImage = new URL(withBase(image), Astro.site);
     <script is:inline>
       const menuButton = document.querySelector('[data-menu-button]');
       const menu = document.querySelector('[data-menu]');
+      const compactNav = window.matchMedia('(max-width: 1100px)');
       const setMenu = (open) => {
-        menuButton?.setAttribute('aria-expanded', String(open));
-        menu?.toggleAttribute('data-open', open);
-        document.body.classList.toggle('menu-open', open);
+        const next = Boolean(open && compactNav.matches);
+        menuButton?.setAttribute('aria-expanded', String(next));
+        menu?.toggleAttribute('data-open', next);
+        document.body.classList.toggle('menu-open', next);
       };
-      menuButton?.addEventListener('click', () => {
+      menuButton?.addEventListener('click', (event) => {
+        event.stopPropagation();
         setMenu(menuButton.getAttribute('aria-expanded') !== 'true');
       });
       menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
@@ -85,6 +88,7 @@ const socialImage = new URL(withBase(image), Astro.site);
       document.addEventListener('click', (event) => {
         if (!event.target.closest('.site-header')) setMenu(false);
       });
+      compactNav.addEventListener('change', () => setMenu(false));
       document.querySelectorAll('[data-locale]').forEach((link) => link.addEventListener('click', () => {
         localStorage.setItem('fm-locale', link.dataset.locale);
       }));

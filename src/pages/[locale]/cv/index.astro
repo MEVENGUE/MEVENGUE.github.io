@@ -1,0 +1,141 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CvDocument from '@/cv/components/CvDocument.astro';
+import { locales, t, type Locale } from '@/i18n';
+import { getPublicCv } from '@/cv/lib/loadPublicCv';
+import '@/cv/cv.css';
+import '@/cv/print.css';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const copy = t(locale);
+const cv = getPublicCv();
+const isFr = locale === 'fr';
+---
+<BaseLayout
+  locale={locale}
+  title={copy.nav.cv}
+  description={isFr
+    ? `CV public de ${cv.identity.name} — architecture cloud, SAP et systèmes d’information.`
+    : `Public CV of ${cv.identity.name} — cloud architecture, SAP and information systems.`}
+>
+  <section class="cv-page is-theater" data-cv-page>
+    <div class="cv-toolbar">
+      <p>
+        {isFr
+          ? 'Glisser pour tourner · molette pour agrandir · clic pour un lien · double-clic pour recentrer'
+          : 'Drag to rotate · wheel to zoom · click a link · double-click to reset'}
+      </p>
+      <div class="cv-toolbar-actions">
+        <button class="button" type="button" data-cv-view="paper" aria-pressed="false">
+          {isFr ? 'Vue papier' : 'Paper view'}
+        </button>
+        <button class="button" type="button" data-cv-view="theater" aria-pressed="true">
+          {isFr ? 'Rideau 3D' : '3D curtain'}
+        </button>
+      </div>
+    </div>
+
+    <div class="cv-theater" data-cv-theater>
+      <canvas
+        data-cv-canvas
+        aria-label={isFr ? 'CV public en rideau HTML interactif' : 'Public CV as an interactive HTML curtain'}
+      ></canvas>
+      <div class="cv-theater-overlay" data-cv-overlay>
+        <span>{isFr ? 'Tissage du CV…' : 'Weaving the CV…'}</span>
+      </div>
+      <p class="cv-theater-hint" data-cv-hint>
+        {isFr
+          ? 'Glisser : tourner · molette / pincer : agrandir · clic : lien · double-clic : recentrer'
+          : 'Drag: rotate · wheel / pinch: zoom · click: link · double-click: reset'}
+      </p>
+      <p class="cv-theater-mode" data-cv-mode hidden></p>
+      <p class="cv-canvas-fallback" data-cv-canvas-fallback hidden>
+        {isFr
+          ? 'Présentation 3D indisponible dans ce navigateur. La vue papier reste disponible.'
+          : '3D presentation unavailable in this browser. Paper view remains available.'}
+      </p>
+    </div>
+
+    <div class="cv-sheet-shell" data-cv-paper aria-hidden="true" inert>
+      <CvDocument locale={locale === 'en' ? 'en' : 'fr'} />
+    </div>
+
+    <p class="cv-privacy-note">
+      {isFr
+        ? <>Pour plus d’informations, merci de me <a href={`mailto:${cv.contacts.email}`}>contacter par mail</a>.</>
+        : <>For more information, please <a href={`mailto:${cv.contacts.email}`}>contact me by email</a>.</>}
+    </p>
+  </section>
+</BaseLayout>
+
+<script>
+  import { createHtmlCanvasAdapter } from '@/cv/canvas/HtmlCanvasAdapter';
+
+  const page = document.querySelector<HTMLElement>('[data-cv-page]');
+  const paperButton = document.querySelector<HTMLButtonElement>('[data-cv-view="paper"]');
+  const theaterButton = document.querySelector<HTMLButtonElement>('[data-cv-view="theater"]');
+  const theater = document.querySelector<HTMLElement>('[data-cv-theater]');
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-cv-canvas]');
+  const overlay = document.querySelector<HTMLElement>('[data-cv-overlay]');
+  const fallback = document.querySelector<HTMLElement>('[data-cv-canvas-fallback]');
+  const modeLabel = document.querySelector<HTMLElement>('[data-cv-mode]');
+  const sheet = document.querySelector<HTMLElement>('[data-cv-sheet]');
+  const paper = document.querySelector<HTMLElement>('[data-cv-paper]');
+  const isFr = document.documentElement.lang === 'fr';
+
+  let adapter: Awaited<ReturnType<typeof createHtmlCanvasAdapter>> | null = null;
+  let starting = false;
+
+  const setView = (view: 'theater' | 'paper') => {
+    page?.classList.toggle('is-theater', view === 'theater');
+    page?.classList.toggle('is-paper', view === 'paper');
+    theaterButton?.setAttribute('aria-pressed', String(view === 'theater'));
+    paperButton?.setAttribute('aria-pressed', String(view === 'paper'));
+    paper?.toggleAttribute('inert', view === 'theater');
+    paper?.setAttribute('aria-hidden', String(view === 'theater'));
+    theater?.toggleAttribute('inert', view === 'paper');
+    theater?.setAttribute('aria-hidden', String(view === 'paper'));
+  };
+
+  const showFallback = () => {
+    if (overlay) overlay.hidden = true;
+    if (fallback) fallback.hidden = false;
+    setView('paper');
+  };
+
+  const startTheater = async () => {
+    if (!canvas || !sheet || adapter || starting) return;
+    starting = true;
+    try {
+      adapter = await createHtmlCanvasAdapter({
+        source: sheet,
+        canvas,
+        onReady(mode) {
+          if (overlay) overlay.hidden = true;
+          if (!modeLabel) return;
+          modeLabel.hidden = false;
+          modeLabel.textContent = mode === 'html-in-canvas'
+            ? (isFr ? 'Texture live · HTML-in-Canvas' : 'Live texture · HTML-in-Canvas')
+            : (isFr ? 'Texture raster locale' : 'Local raster texture');
+        },
+      });
+      if (!adapter) showFallback();
+    } catch {
+      showFallback();
+    } finally {
+      starting = false;
+    }
+  };
+
+  paperButton?.addEventListener('click', () => setView('paper'));
+  theaterButton?.addEventListener('click', () => {
+    setView('theater');
+    void startTheater();
+  });
+
+  if (theater && canvas && sheet) void startTheater();
+</script>

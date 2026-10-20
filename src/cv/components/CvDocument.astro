@@ -1,0 +1,127 @@
+---
+import type { CvLocale } from '../lib/loadPublicCv';
+import { getPublicCv, resolvePublicContacts } from '../lib/loadPublicCv';
+
+const { locale } = Astro.props as { locale: CvLocale };
+const cv = getPublicCv();
+const contacts = resolvePublicContacts(cv);
+function t(value: { fr: string; en: string }): string;
+function t(value: { fr: string[]; en: string[] }): string[];
+function t(value: { fr: string | string[]; en: string | string[] }) {
+  return value[locale];
+}
+---
+<article class="cv-sheet" id="cv-sheet" data-cv-sheet lang={locale}>
+  <header class="cv-header">
+    <div>
+      <h1 class="cv-name">{cv.identity.name}</h1>
+      <p class="cv-role">{t(cv.headline)}</p>
+      {cv.availability && <p class="cv-availability">{t(cv.availability)}</p>}
+    </div>
+    <div class="cv-contacts" aria-label={locale === 'fr' ? 'Coordonnées publiques' : 'Public contacts'}>
+      {contacts.map((contact) => (
+        contact.href
+          ? <a href={contact.href} rel={contact.label === 'Email' ? undefined : 'me'}>{contact.value}</a>
+          : <span>{contact.value}</span>
+      ))}
+    </div>
+  </header>
+
+  <div class="cv-grid">
+    <div>
+      <section class="cv-section">
+        <h2>{locale === 'fr' ? 'Profil' : 'Profile'}</h2>
+        <p>{t(cv.summary)}</p>
+      </section>
+
+      <section class="cv-section">
+        <h2>{locale === 'fr' ? 'Expérience' : 'Experience'}</h2>
+        {cv.experience.map((item) => (
+          <div class="cv-item">
+            <div class="cv-item-head">
+              <strong>{t(item.title)}</strong>
+              {item.period ? <span class="meta">{item.period}</span> : null}
+            </div>
+            <p class="org">{item.org}{item.place ? ` · ${item.place}` : ''}</p>
+            <ul>
+              {t(item.bullets).map((bullet) => <li>{bullet}</li>)}
+            </ul>
+          </div>
+        ))}
+      </section>
+
+      <section class="cv-section">
+        <h2>{locale === 'fr' ? 'Projets sélectionnés' : 'Selected projects'}</h2>
+        {cv.projects.map((project) => (
+          <div class="cv-item">
+            <div class="cv-item-head">
+              <strong>{project.name}</strong>
+              <span class="meta">{project.year}</span>
+            </div>
+            <p class="org">{project.stack}</p>
+            <p>{t(project.summary)}</p>
+          </div>
+        ))}
+      </section>
+    </div>
+
+    <aside>
+      <section class="cv-section">
+        <h2>{locale === 'fr' ? 'Compétences' : 'Skills'}</h2>
+        <div class="cv-skills">
+          {cv.skills.map((group) => (
+            <div class="cv-skill-group">
+              <strong>{t(group.label)}</strong>
+              <span>{group.items.join(' · ')}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <h2>{locale === 'fr' ? 'Formation' : 'Education'}</h2>
+        {cv.education.map((item) => (
+          <div class="cv-item">
+            <div class="cv-item-head">
+              <strong>{t(item.title)}</strong>
+              {item.period ? <span class="meta">{item.period}</span> : null}
+            </div>
+            <p class="org">{item.school}</p>
+            {item.note ? <p>{t(item.note)}</p> : null}
+          </div>
+        ))}
+      </section>
+
+      <section class="cv-section">
+        <h2>{locale === 'fr' ? 'Langues' : 'Languages'}</h2>
+        {cv.languages.map((item) => (
+          <div class="cv-item">
+            <strong>{t(item.name)}</strong>
+            <p>{t(item.level)}</p>
+          </div>
+        ))}
+      </section>
+
+      {cv.certifications?.length > 0 && (
+        <section class="cv-section">
+          <h2>{locale === 'fr' ? 'Certifications' : 'Certifications'}</h2>
+          <ul>
+            {cv.certifications.map((item) => <li>{item}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {cv.engagement?.length > 0 && (
+        <section class="cv-section">
+          <h2>{locale === 'fr' ? 'Engagement' : 'Engagement'}</h2>
+          {cv.engagement.map((item) => (
+            <div class="cv-item">
+              <strong>{t(item.title)}</strong>
+              <p>{t(item.detail)}</p>
+            </div>
+          ))}
+        </section>
+      )}
+    </aside>
+  </div>
+</article>

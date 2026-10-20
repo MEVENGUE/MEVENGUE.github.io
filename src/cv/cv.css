@@ -1,0 +1,350 @@
+.cv-page {
+  --cv-ivory: #f7f1e8;
+  --cv-paper: #fffdf8;
+  --cv-ink: #2a241c;
+  --cv-muted: #6d6458;
+  --cv-line: #ddd2c3;
+  --cv-accent: #9a5b3c;
+  --cv-serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --cv-sans: "Avenir Next", "Segoe UI", Arial, sans-serif;
+  width: min(1360px, calc(100% - 1.25rem));
+  margin-inline: auto;
+  padding: 0.45rem 0 2.5rem;
+}
+
+.cv-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+}
+
+.cv-toolbar p {
+  margin: 0;
+  color: var(--cv-muted);
+  font-size: 0.9rem;
+}
+
+.cv-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cv-toolbar .button {
+  border: 1px solid var(--cv-line);
+  background: #fff;
+  color: var(--cv-ink);
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cv-toolbar .button.primary,
+.cv-toolbar .button[aria-pressed="true"] {
+  background: var(--cv-accent);
+  border-color: var(--cv-accent);
+  color: #fff;
+}
+
+.cv-theater {
+  position: relative;
+  min-height: 580px;
+  height: min(calc(100dvh - 6.8rem), 980px);
+  border: 1px solid var(--cv-line);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 252, 248, 0.9), transparent 42%),
+    radial-gradient(circle at 18% 80%, rgba(154, 91, 60, 0.16), transparent 36%),
+    linear-gradient(180deg, #f4eee4, #e8dfd1);
+  box-shadow: 0 28px 70px rgba(42, 36, 28, 0.12);
+}
+
+.cv-theater canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+.cv-theater-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  color: var(--cv-ink);
+  background: color-mix(in srgb, #eee6d8 82%, white);
+  font-family: var(--cv-serif);
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+}
+
+.cv-theater-overlay[hidden] {
+  display: none;
+}
+
+.cv-theater-hint,
+.cv-theater-mode {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  margin: 0;
+  max-width: min(42rem, calc(100% - 2rem));
+  padding: 0.45rem 0.75rem;
+  color: #4a433a;
+  background: rgba(255, 252, 248, 0.78);
+  border: 1px solid rgba(221, 210, 195, 0.9);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  font-size: 0.78rem;
+}
+
+.cv-theater-mode {
+  left: auto;
+  right: 1rem;
+  bottom: 1rem;
+  color: var(--cv-accent);
+  font-family: var(--cv-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.cv-page.is-paper .cv-theater {
+  display: none;
+}
+
+.cv-sheet-shell {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(154, 91, 60, 0.08), transparent 40%),
+    linear-gradient(180deg, #f3eee6, #efe8dc);
+  border: 1px solid var(--cv-line);
+  border-radius: 1rem;
+}
+
+.cv-page.is-theater .cv-sheet-shell {
+  position: fixed;
+  left: -9000px;
+  top: 0;
+  width: 794px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cv-sheet {
+  width: 210mm;
+  min-height: 297mm;
+  max-width: 100%;
+  padding: 14mm 14mm 12mm;
+  background: var(--cv-paper);
+  color: var(--cv-ink);
+  box-shadow: 0 24px 60px rgba(42, 36, 28, 0.12);
+  font-family: var(--cv-sans);
+  font-size: 9.2pt;
+  line-height: 1.35;
+}
+
+.cv-sheet * {
+  box-sizing: border-box;
+}
+
+.cv-header {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1.5px solid var(--cv-ink);
+  margin-bottom: 0.85rem;
+}
+
+.cv-name {
+  margin: 0;
+  font-family: var(--cv-serif);
+  font-size: 26pt;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.cv-role {
+  margin: 0.35rem 0 0;
+  color: var(--cv-accent);
+  font-size: 10pt;
+  font-weight: 600;
+}
+
+.cv-availability {
+  margin: 0.25rem 0 0;
+  color: var(--cv-muted);
+  font-size: 8.5pt;
+}
+
+.cv-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: flex-end;
+  text-align: right;
+  font-size: 8.3pt;
+}
+
+.cv-contacts a {
+  color: var(--cv-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.cv-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.9fr;
+  gap: 1rem 1.15rem;
+}
+
+.cv-section {
+  margin: 0 0 0.75rem;
+}
+
+.cv-section h2 {
+  margin: 0 0 0.4rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--cv-line);
+  font-family: var(--cv-serif);
+  font-size: 11pt;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.cv-section p,
+.cv-section li {
+  margin: 0;
+  color: #3a332b;
+}
+
+.cv-section ul {
+  margin: 0.2rem 0 0;
+  padding-left: 1rem;
+}
+
+.cv-item {
+  margin: 0 0 0.55rem;
+}
+
+.cv-item-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.cv-item strong {
+  font-size: 9.2pt;
+}
+
+.cv-item .meta {
+  color: var(--cv-muted);
+  font-size: 8pt;
+  white-space: nowrap;
+}
+
+.cv-item .org {
+  color: var(--cv-accent);
+  font-size: 8.4pt;
+  margin-top: 0.1rem;
+}
+
+.cv-skills {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.cv-skill-group strong {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 8.5pt;
+}
+
+.cv-skill-group span {
+  color: #4a433a;
+  font-size: 8.1pt;
+}
+
+.cv-canvas-fallback {
+  position: absolute;
+  inset: auto 1rem 4rem;
+  padding: 1rem 1.1rem;
+  color: var(--cv-ink);
+  background: rgba(255, 252, 248, 0.92);
+  border: 1px solid var(--cv-line);
+  border-radius: 0.8rem;
+  font-size: 0.92rem;
+}
+
+.cv-canvas-fallback[hidden] {
+  display: none;
+}
+
+.cv-privacy-note {
+  margin-top: 1rem;
+  color: var(--cv-muted);
+  font-size: 0.82rem;
+}
+
+.cv-privacy-note a {
+  color: var(--cv-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
+@media (max-width: 1100px) {
+  .cv-toolbar p {
+    display: none;
+  }
+
+  .cv-toolbar-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .cv-toolbar .button {
+    min-height: 2.6rem;
+    padding-inline: 0.95rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .cv-theater {
+    min-height: 520px;
+    height: min(calc(100dvh - 8.75rem), 780px);
+  }
+
+  .cv-theater-hint,
+  .cv-theater-mode {
+    display: none;
+  }
+
+  .cv-sheet {
+    width: 100%;
+    min-height: 0;
+    padding: 1.25rem;
+  }
+
+  .cv-header,
+  .cv-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cv-contacts {
+    align-items: flex-start;
+    text-align: left;
+  }
+}

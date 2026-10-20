@@ -3,6 +3,15 @@ dist/
 .astro/
 .DS_Store
 
+# Private CV data and local-only artifacts (never deploy)
+private/**
+!private/.gitkeep
+!private/cv.private.example.json
+src/cv/output/
+*.private.pdf
+CV_Franck_MEVENGUE.pdf
+dist/cv/
+
 # Archives de travail non nécessaires au déploiement
 Logo écoles/
 Projet Ingénieur ECAM EPMI/
