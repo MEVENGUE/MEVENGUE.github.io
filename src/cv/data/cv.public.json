@@ -16,8 +16,8 @@
     "en": "Cloud architecture, systems and networks, SAP / Information systems — Business processes • Analysis • IT coordination"
   },
   "availability": {
-    "fr": "Master Architecture Cloud, Systèmes & Réseaux — SUPINFO Paris · Stage 6 mois · disponible dès janvier 2027 · Paris",
-    "en": "Master’s in Cloud Architecture, Systems & Networks — SUPINFO Paris · 6-month internship · available from January 2027 · Paris"
+    "fr": "Master Architecture Cloud, Systèmes & Réseaux — SUPINFO Paris · Stage 6 mois · disponible dès mars 2027 · Paris",
+    "en": "Master’s in Cloud Architecture, Systems & Networks — SUPINFO Paris · 6-month internship · available from March 2027 · Paris"
   },
   "summary": {
     "fr": "Étudiant en Master 2 Architecture Cloud, Systèmes & Réseaux à SUPINFO Paris, je possède une expérience en environnement SAP acquise chez Iliade Consulting. J’y ai contribué à l’automatisation de traitements avec Python et ABAP, à la qualification d’anomalies et à la formalisation de procédures. Rigoureux et à l’aise dans les échanges entre interlocuteurs fonctionnels et techniques, je souhaite contribuer au programme FOCUS sur le suivi des demandes d’accès, la traçabilité des tickets et l’amélioration des processus d’autorisations SAP.",
@@ -53,7 +53,7 @@
       "items": ["Outils bureautiques", "Notions d’Excel"]
     },
     {
-      "label": { "fr": "À approfondir", "en": "To develop further" },
+      "label": { "fr": "Atouts complémentaires", "en": "Additional strengths" },
       "items": ["SAP S/4HANA", "Fiori", "Business Catalogs", "Rôles et autorisations SAP", "Excel avancé"]
     }
   ],

@@ -30,6 +30,7 @@ export type HtmlCanvasAdapterOptions = {
 export type HtmlCanvasAdapter = {
   captureMode: CaptureMode;
   refresh(): Promise<void>;
+  panVertical(delta: number): void;
   dispose(): void;
 };
 
@@ -236,12 +237,15 @@ export async function createHtmlCanvasAdapter(
   scene.fog = new THREE.Fog(STUDIO, 7, 16);
 
   const camera: PerspectiveCamera = new THREE.PerspectiveCamera(26, 1, 0.08, 40);
-  const cameraTarget = new THREE.Vector3(0, topY - clothH * 0.5, 0);
+  const restLookY = topY - clothH * 0.5;
+  const cameraTarget = new THREE.Vector3(0, restLookY, 0);
   const baseYaw = -0.06;
   const basePitch = 0.03;
   let yaw = baseYaw;
   let pitch = basePitch;
   let radius = mobile ? 4.2 : 3.65;
+  let lookY = restLookY;
+  let lookTargetY = restLookY;
   let userOrbit = false;
   let yawVel = 0;
   let pitchVel = 0;
@@ -356,7 +360,23 @@ export async function createHtmlCanvasAdapter(
   const grabHit = new THREE.Vector3();
   const camOffset = new THREE.Vector3();
 
+  const panRange = () => {
+    const vFov = (camera.fov * Math.PI) / 180;
+    const visible = 2 * Math.tan(vFov / 2) * radius;
+    return Math.max(0.38, (clothH - visible * 0.36) / 2);
+  };
+
+  const clampLookY = (value: number) => {
+    const range = panRange();
+    return Math.max(restLookY - range, Math.min(restLookY + range, value));
+  };
+
+  const panVertical = (delta: number) => {
+    lookTargetY = clampLookY(lookTargetY + delta);
+  };
+
   const placeCamera = () => {
+    cameraTarget.y = lookY;
     camera.position.set(
       Math.sin(yaw) * Math.cos(pitch) * radius,
       cameraTarget.y + Math.sin(pitch) * radius,
@@ -371,6 +391,8 @@ export async function createHtmlCanvasAdapter(
     const distW = (clothW * 0.62) / Math.tan((vFov / 2) * Math.max(camera.aspect, 0.5));
     const fitted = Math.max(distH, distW) * (mobile ? 1.06 : 1);
     radius = Math.max(2.15, Math.min(7.6, userOrbit ? radius : fitted));
+    lookTargetY = clampLookY(lookTargetY);
+    lookY = clampLookY(lookY);
   };
 
   const resize = () => {
@@ -559,6 +581,8 @@ export async function createHtmlCanvasAdapter(
     pitch = basePitch;
     yawVel = 0;
     pitchVel = 0;
+    lookTargetY = restLookY;
+    lookY = restLookY;
     fitRadius();
     placeCamera();
   };
@@ -654,8 +678,32 @@ export async function createHtmlCanvasAdapter(
 
   const onWheel = (event: WheelEvent) => {
     event.preventDefault();
+    if (event.shiftKey) {
+      panVertical(-event.deltaY * 0.0024);
+      return;
+    }
     userOrbit = true;
     radius = Math.max(2.05, Math.min(7.6, radius * Math.exp(event.deltaY * 0.00115)));
+  };
+
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (canvas.offsetParent === null) return;
+    const target = event.target as HTMLElement | null;
+    if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
+    const step = clothH * 0.16;
+    if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+      event.preventDefault();
+      panVertical(step);
+    } else if (event.key === 'ArrowDown' || event.key === 'PageDown') {
+      event.preventDefault();
+      panVertical(-step);
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      lookTargetY = clampLookY(restLookY + panRange());
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      lookTargetY = clampLookY(restLookY - panRange());
+    }
   };
 
   const onDblClick = (event: MouseEvent) => {
@@ -678,6 +726,7 @@ export async function createHtmlCanvasAdapter(
       if (Math.abs(yawVel) < 0.002) yawVel = 0;
       if (Math.abs(pitchVel) < 0.002) pitchVel = 0;
     }
+    lookY += (lookTargetY - lookY) * Math.min(1, dt * 9);
     placeCamera();
     if (captureMode === 'html-in-canvas' && now - lastPaint > 80) {
       lastPaint = now;
@@ -696,6 +745,8 @@ export async function createHtmlCanvasAdapter(
   canvas.addEventListener('pointercancel', onPointerUp);
   canvas.addEventListener('wheel', onWheel, { passive: false });
   canvas.addEventListener('dblclick', onDblClick);
+  window.addEventListener('keydown', onKeyDown);
+  canvas.tabIndex = 0;
   canvas.style.touchAction = 'none';
   canvas.style.cursor = 'grab';
 
@@ -716,6 +767,7 @@ export async function createHtmlCanvasAdapter(
     async refresh() {
       await refreshTexture(true);
     },
+    panVertical,
     dispose() {
       disposed = true;
       cancelAnimationFrame(frame);
@@ -727,6 +779,7 @@ export async function createHtmlCanvasAdapter(
       canvas.removeEventListener('pointercancel', onPointerUp);
       canvas.removeEventListener('wheel', onWheel);
       canvas.removeEventListener('dblclick', onDblClick);
+      window.removeEventListener('keydown', onKeyDown);
       canvas.removeAttribute('layoutsubtree');
       texture.dispose();
       geometry.dispose();

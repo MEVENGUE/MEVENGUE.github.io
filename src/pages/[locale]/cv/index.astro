@@ -26,8 +26,8 @@ const isFr = locale === 'fr';
     <div class="cv-toolbar">
       <p>
         {isFr
-          ? 'Glisser pour tourner · molette pour agrandir · clic pour un lien · double-clic pour recentrer'
-          : 'Drag to rotate · wheel to zoom · click a link · double-click to reset'}
+          ? 'Glisser pour tourner · molette pour agrandir · boutons / flèches pour lire le haut et le bas · clic pour un lien · double-clic pour recentrer'
+          : 'Drag to rotate · wheel to zoom · buttons / arrows to read top and bottom · click a link · double-click to reset'}
       </p>
       <div class="cv-toolbar-actions">
         <button class="button" type="button" data-cv-view="paper" aria-pressed="false">
@@ -47,10 +47,20 @@ const isFr = locale === 'fr';
       <div class="cv-theater-overlay" data-cv-overlay>
         <span>{isFr ? 'Tissage du CV…' : 'Weaving the CV…'}</span>
       </div>
+      <div class="cv-theater-lift" data-cv-lift>
+        <button type="button" data-cv-pan="up" aria-label={isFr ? 'Monter dans le CV' : 'Scroll the CV up'}>
+          <span aria-hidden="true">↑</span>
+          <small>{isFr ? 'Haut' : 'Top'}</small>
+        </button>
+        <button type="button" data-cv-pan="down" aria-label={isFr ? 'Descendre dans le CV' : 'Scroll the CV down'}>
+          <span aria-hidden="true">↓</span>
+          <small>{isFr ? 'Bas' : 'Bottom'}</small>
+        </button>
+      </div>
       <p class="cv-theater-hint" data-cv-hint>
         {isFr
-          ? 'Glisser : tourner · molette / pincer : agrandir · clic : lien · double-clic : recentrer'
-          : 'Drag: rotate · wheel / pinch: zoom · click: link · double-click: reset'}
+          ? 'Glisser : tourner · molette : agrandir · Shift + molette ou flèches : haut / bas · clic : lien · double-clic : recentrer'
+          : 'Drag: rotate · wheel: zoom · Shift + wheel or arrows: up / down · click: link · double-click: reset'}
       </p>
       <p class="cv-theater-mode" data-cv-mode hidden></p>
       <p class="cv-canvas-fallback" data-cv-canvas-fallback hidden>
@@ -130,6 +140,29 @@ const isFr = locale === 'fr';
       starting = false;
     }
   };
+
+  const bindPanHold = (button: HTMLButtonElement | null, direction: 1 | -1) => {
+    if (!button) return;
+    let timer = 0;
+    const step = () => adapter?.panVertical(direction * 0.32);
+    const stop = () => {
+      window.clearInterval(timer);
+      timer = 0;
+      window.removeEventListener('pointerup', stop);
+      window.removeEventListener('pointercancel', stop);
+    };
+    button.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      step();
+      timer = window.setInterval(step, 85);
+      window.addEventListener('pointerup', stop);
+      window.addEventListener('pointercancel', stop);
+    });
+  };
+
+  bindPanHold(document.querySelector<HTMLButtonElement>('[data-cv-pan="up"]'), 1);
+  bindPanHold(document.querySelector<HTMLButtonElement>('[data-cv-pan="down"]'), -1);
 
   paperButton?.addEventListener('click', () => setView('paper'));
   theaterButton?.addEventListener('click', () => {
