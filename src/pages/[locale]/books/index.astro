@@ -23,8 +23,8 @@ const books = site.books;
       <p class="eyebrow">{copy.bookSection}</p>
       <h1>{copy.nav.books}</h1>
       <p class="lead">{locale === 'fr'
-        ? 'Deux essais en français, anglais et chinois — à lire comme des livres, avec PDF et aperçu intégré.'
-        : 'Two essays in French, English and Chinese — to be read as books, with PDF and embedded preview.'}</p>
+        ? 'Un livre pop-up 3D et deux essais — à feuilleter, lire en PDF, en français, anglais et chinois.'
+        : 'A 3D pop-up book and two essays — to leaf through or read as PDFs, in French, English and Chinese.'}</p>
     </div>
   </header>
 
@@ -40,12 +40,21 @@ const books = site.books;
           <p>{book.subtitle[locale]}</p>
           <div class="quick-links">
             <a href={withBase(`/${locale}/books/${book.slug}/`)}>{locale === 'fr' ? 'Ouvrir la page' : 'Open page'}</a>
-            <span>/</span>
-            <a href={withBase(book.pdf.fr)}>Français</a>
-            <span>/</span>
-            <a href={withBase(book.pdf.en)}>English</a>
-            <span>/</span>
-            <a href={withBase(book.pdf.zh)}>中文</a>
+            {book.kind === 'interactive' && book.demo ? (
+              <>
+                <span>/</span>
+                <a href={withBase(book.demo)}>{copy.readInteractive}</a>
+              </>
+            ) : (
+              <>
+                <span>/</span>
+                <a href={withBase(book.pdf.fr)}>Français</a>
+                <span>/</span>
+                <a href={withBase(book.pdf.en)}>English</a>
+                <span>/</span>
+                <a href={withBase(book.pdf.zh)}>中文</a>
+              </>
+            )}
           </div>
         </div>
       </article>

@@ -844,6 +844,20 @@
   padding: 1.5rem;
 }
 
+.book-stage-3d {
+  min-height: min(82vh, 920px);
+}
+
+.book-viewer-3d {
+  min-height: min(78vh, 860px);
+  height: min(78vh, 860px);
+  background: #0c2438;
+}
+
+.book-viewer-3d iframe {
+  background: #0c2438;
+}
+
 .document-list {
   overflow-y: auto;
   border-right: 1px solid var(--line);

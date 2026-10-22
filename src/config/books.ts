@@ -9,6 +9,8 @@ export type BookLang = (typeof bookLanguages)[number]['id'];
 export type Book = {
   slug: string;
   year: string;
+  kind?: 'pdf' | 'interactive';
+  demo?: string;
   format: { fr: string; en: string };
   status: { fr: string; en: string };
   title: Record<BookLang, string>;
@@ -20,6 +22,62 @@ export type Book = {
 };
 
 export const books: Book[] = [
+  {
+    slug: 'paradis-des-mathematiques',
+    year: '2026',
+    kind: 'interactive',
+    demo: '/Livres/paradis-des-mathematiques/app/',
+    format: {
+      fr: 'Livre pop-up 3D interactif · 10 chapitres · FR · EN · AR · ZH',
+      en: 'Interactive 3D pop-up book · 10 chapters · FR · EN · AR · ZH',
+    },
+    status: {
+      fr: 'Démonstration interactive · livre 3D · 2026',
+      en: 'Interactive demonstration · 3D book · 2026',
+    },
+    title: {
+      fr: 'Le Paradis des mathématiques',
+      en: 'The Paradise of Mathematics',
+      zh: '数学天堂',
+    },
+    subtitle: {
+      fr: 'Un livre vivant : chaque page déplie une idée, une animation et une construction mathématique.',
+      en: 'A living book: each page unfolds an idea, an animation and a mathematical construction.',
+      zh: '一本会翻页的立体书：每一页展开一个观念、一段动画与一座数学构造。',
+    },
+    cover: {
+      fr: '/Livres/paradis-des-mathematiques/cover.png',
+      en: '/Livres/paradis-des-mathematiques/cover.png',
+      zh: '/Livres/paradis-des-mathematiques/cover.png',
+    },
+    pdf: {
+      fr: '/Livres/paradis-des-mathematiques/app/',
+      en: '/Livres/paradis-des-mathematiques/app/',
+      zh: '/Livres/paradis-des-mathematiques/app/',
+    },
+    idea: {
+      fr: [
+        'Le Paradis des mathématiques est une démonstration interactive : un volume 3D se feuillette comme un vrai livre. Dix chapitres lèvent le nombre d’or, les solides de Platon, Mandelbrot, le tesseract, le hasard, les ondes, les tangentes, les intégrales, les transformations et l’infini.',
+        'Chaque double page associe un texte original, une formule et un atelier. L’ouvrage se lit en français, anglais, arabe et chinois, sans inventer de lien vers un livre papier.',
+      ],
+      en: [
+        'The Paradise of Mathematics is an interactive demonstration: a 3D volume that turns like a real book. Ten chapters raise the golden ratio, Platonic solids, Mandelbrot, the tesseract, chance, waves, tangents, integrals, transforms and infinity.',
+        'Each spread pairs original writing, a formula and a studio. The work can be read in French, English, Arabic and Chinese, without inventing a print-book URL.',
+      ],
+    },
+    refuses: {
+      fr: [
+        'Copier un livre existant ou inventer une URL d’ouvrage.',
+        'Réduire les mathématiques à un spectacle sans formule.',
+        'Remplacer la lecture par une animation décorative.',
+      ],
+      en: [
+        'Copying an existing book or inventing a book URL.',
+        'Reducing mathematics to a spectacle without formulas.',
+        'Replacing reading with a decorative animation.',
+      ],
+    },
+  },
   {
     slug: 'souverainete-cloud-europeenne',
     year: '2026',

@@ -18,11 +18,13 @@ const locale = Astro.params.locale as Locale;
 const { book } = Astro.props;
 const copy = t(locale);
 const defaultLang = (locale === 'en' ? 'en' : 'fr') as BookLang;
+const interactive = book.kind === 'interactive';
 const title = book.title[locale];
 const subtitle = book.subtitle[locale];
 const status = book.status[locale];
 const idea = book.idea[locale];
 const refuses = book.refuses[locale];
+const demoUrl = withBase(book.demo || book.pdf.fr);
 const editions = bookLanguages.map((lang) => ({
   ...lang,
   title: book.title[lang.id],
@@ -40,22 +42,28 @@ const defaultEdition = editions.find((edition) => edition.id === defaultLang) ??
         <h1>{title}</h1>
         <p class="lead">{subtitle}</p>
         <p class="meta book-status">{status}</p>
-        <div class="book-lang-switch" role="group" aria-label={copy.bookLangs} data-book-langs>
-          {editions.map((edition) => (
-            <button
-              type="button"
-              class="book-lang-btn"
-              data-book-lang={edition.id}
-              data-pdf={edition.pdf}
-              data-cover={edition.cover}
-              data-title={edition.title}
-              aria-pressed={edition.id === defaultLang ? 'true' : 'false'}
-            >
-              <span class="book-lang-short">{edition.short}</span>
-              <span class="book-lang-label">{edition.label}</span>
-            </button>
-          ))}
-        </div>
+        {interactive ? (
+          <div class="quick-links">
+            <a class="button primary contact-primary" href={demoUrl}>{copy.readInteractive} ↗</a>
+          </div>
+        ) : (
+          <div class="book-lang-switch" role="group" aria-label={copy.bookLangs} data-book-langs>
+            {editions.map((edition) => (
+              <button
+                type="button"
+                class="book-lang-btn"
+                data-book-lang={edition.id}
+                data-pdf={edition.pdf}
+                data-cover={edition.cover}
+                data-title={edition.title}
+                aria-pressed={edition.id === defaultLang ? 'true' : 'false'}
+              >
+                <span class="book-lang-short">{edition.short}</span>
+                <span class="book-lang-label">{edition.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       <figure class="book-cover">
         <img data-book-cover src={defaultEdition.cover} width="960" height="1440" alt={title} />
@@ -77,24 +85,56 @@ const defaultEdition = editions.find((edition) => edition.id === defaultLang) ??
 
       <aside class="book-aside">
         <h2>{locale === 'fr' ? 'Lire' : 'Read'}</h2>
-        <a class="button primary contact-primary" data-book-open href={defaultEdition.pdf}>{copy.readPdf} ↗</a>
+        {interactive ? (
+          <a class="button primary contact-primary" href={demoUrl}>{copy.readInteractive} ↗</a>
+        ) : (
+          <a class="button primary contact-primary" data-book-open href={defaultEdition.pdf}>{copy.readPdf} ↗</a>
+        )}
         <p class="meta">{locale === 'fr' ? 'Auteur' : 'Author'}</p>
         <p>{site.name}</p>
         <p class="meta">{locale === 'fr' ? 'Format' : 'Format'}</p>
         <p>{book.format[locale]}</p>
         <p class="meta">{copy.bookLangs}</p>
-        <p class="book-aside-langs">
-          {editions.map((edition, index) => (
-            <>
-              {index > 0 && <span aria-hidden="true"> · </span>}
-              <a href={edition.pdf} data-book-lang-link={edition.id}>{edition.label}</a>
-            </>
-          ))}
-        </p>
+        {interactive ? (
+          <p>Français · English · العربية · 中文</p>
+        ) : (
+          <p class="book-aside-langs">
+            {editions.map((edition, index) => (
+              <>
+                {index > 0 && <span aria-hidden="true"> · </span>}
+                <a href={edition.pdf} data-book-lang-link={edition.id}>{edition.label}</a>
+              </>
+            ))}
+          </p>
+        )}
       </aside>
     </div>
   </section>
 
+  {interactive ? (
+    <section class="section wrap book-documents" aria-labelledby="book-preview-title">
+      <header class="document-heading">
+        <div>
+          <p class="eyebrow">03 · 3D</p>
+          <h2 id="book-preview-title">{copy.bookInteractivePreview}</h2>
+        </div>
+        <p class="lead">{locale === 'fr'
+          ? 'Feuilletez le volume dans le navigateur. Les langues FR, EN, AR et ZH sont dans le livre.'
+          : 'Leaf through the volume in the browser. FR, EN, AR and ZH live inside the book.'}</p>
+      </header>
+      <div class="document-stage book-stage book-stage-3d">
+        <div class="document-toolbar">
+          <strong>{title}</strong>
+          <div>
+            <a href={demoUrl} target="_blank" rel="noreferrer">{locale === 'fr' ? 'Plein écran' : 'Full screen'} ↗</a>
+          </div>
+        </div>
+        <div class="book-viewer book-viewer-3d">
+          <iframe src={demoUrl} title={title} loading="lazy" allow="fullscreen"></iframe>
+        </div>
+      </div>
+    </section>
+  ) : (
   <section class="section wrap book-documents" aria-labelledby="book-preview-title" data-book-reader>
     <header class="document-heading">
       <div>
@@ -149,6 +189,7 @@ const defaultEdition = editions.find((edition) => edition.id === defaultLang) ??
       </div>
     </div>
   </section>
+  )}
 </BaseLayout>
 
 <script>

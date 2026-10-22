@@ -1,0 +1,1 @@
+function i(t){return Math.sin(t)+.18*t}function f(t){return Math.cos(t)+.18}function c(t){return-Math.cos(t)+.09*t*t}function a(t,n){return c(n)-c(t)}function h(t,n,e,s){const o=[];for(let r=0;r<=s;r++){const u=n+(e-n)*r/s;o.push({x:u,y:t(u)})}return o}export{f as d,i as f,a as i,h as s};

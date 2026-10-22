@@ -10,7 +10,8 @@ Le parcours ECAM EPMI / SUPINFO Paris y est présenté avec études de cas, livr
 
 - Profil académique clair (inspiré des pages personnelles GitHub)
 - Français / anglais
-- Livre *Si Einstein avait eu ChatGPT* (PDF FR/EN)
+- Livre 3D *Le Paradis des mathématiques* (démo interactive FR/EN/AR/ZH)
+- Livres *Si Einstein avait eu ChatGPT* et *La souveraineté du cloud européen* (PDF FR/EN/ZH)
 - 21 projets documentés, articles, docs, RSS et sitemap
 - Carte 3D discrète des projets (Three.js, fallback SVG)
 - Mobile, reduced-motion, navigation clavier
