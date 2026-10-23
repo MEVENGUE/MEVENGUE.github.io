@@ -1,4 +1,4 @@
-import{s as E,f as h,d as L}from"./calculus-B25l6VcQ.js";import{e as k,c as $,p as F,a as P,m as q}from"./chrome-BqE1ziQq.js";import{t as y}from"./index-BCa5qDPf.js";const l=-3.4,v=3.4,w=-3.2,M=3.2;function Y(d){d.append(k(`
+import{s as E,f as h,d as L}from"./calculus-B25l6VcQ.js";import{e as k,c as $,p as F,a as P,m as q}from"./chrome-BqE1ziQq.js";import{t as y}from"./index-C9RxrNRS.js";const l=-3.4,v=3.4,w=-3.2,M=3.2;function Y(d){d.append(k(`
     <div class="viz">
       <div class="viz-controls">
         <label class="ctrl">${y("viz.tangent.point")}

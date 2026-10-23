@@ -1,4 +1,4 @@
-import{e as A,c as $,b as w,p as k,m as F,a as f}from"./chrome-BqE1ziQq.js";import{t as p}from"./index-BCa5qDPf.js";function S(t,r,c,n){return r*Math.sin(2*Math.PI*t/c+n)}function M(t,r,c,n,a,l){const e=[];for(let i=0;i<=l;i++){const o=n+(a-n)*i/l;e.push({x:o,y:S(o,t,r,c)})}return e}function q(t){t.append(A(`
+import{e as A,c as $,b as w,p as k,m as F,a as f}from"./chrome-BqE1ziQq.js";import{t as p}from"./index-C9RxrNRS.js";function S(t,r,c,n){return r*Math.sin(2*Math.PI*t/c+n)}function M(t,r,c,n,a,l){const e=[];for(let i=0;i<=l;i++){const o=n+(a-n)*i/l;e.push({x:o,y:S(o,t,r,c)})}return e}function q(t){t.append(A(`
     <div class="viz">
       <div class="viz-controls">
         <label class="ctrl">${p("viz.waves.amp")}

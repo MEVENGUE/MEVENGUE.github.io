@@ -1,4 +1,4 @@
-import{s as v,i as L,f as x}from"./calculus-B25l6VcQ.js";import{e as P,c as E,p as A,a as B,m as X}from"./chrome-BqE1ziQq.js";import{t as c}from"./index-BCa5qDPf.js";const y=-1.2,f=5.2,Y=-1.6,w=2.6;function N(i){i.append(P(`
+import{s as v,i as L,f as x}from"./calculus-B25l6VcQ.js";import{e as P,c as E,p as A,a as B,m as X}from"./chrome-BqE1ziQq.js";import{t as c}from"./index-C9RxrNRS.js";const y=-1.2,f=5.2,Y=-1.6,w=2.6;function N(i){i.append(P(`
     <div class="viz">
       <div class="viz-controls">
         <label class="ctrl">${c("viz.integral.boundA")}

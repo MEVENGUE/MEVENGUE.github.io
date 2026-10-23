@@ -1,4 +1,4 @@
-import{u as e,v as i,t as s}from"./index-BCa5qDPf.js";import{e as a}from"./chrome-BqE1ziQq.js";function l(t){return t.append(a(`
+import{u as e,v as i,t as s}from"./index-C9RxrNRS.js";import{e as a}from"./chrome-BqE1ziQq.js";function l(t){return t.append(a(`
     <div class="viz invite thanks-letter">
       <p class="invite-kicker">${s("viz.thanks.kicker")}</p>
       <p class="invite-lead">${s("viz.thanks.lead",{title:s("pages.cover.name")})}</p>

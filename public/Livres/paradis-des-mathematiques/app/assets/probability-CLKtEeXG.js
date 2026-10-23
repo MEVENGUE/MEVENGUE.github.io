@@ -1,4 +1,4 @@
-import{e as w}from"./chrome-BqE1ziQq.js";import{t as s,o as A,q as g,r as E}from"./index-BCa5qDPf.js";const m=6,z=1/m;function L(){return 1+Math.floor(Math.random()*m)}function T(n){const e=new Array(m).fill(0);for(let t=0;t<n;t++)e[L()-1]++;return e}function q(n,e){return n.map((t,d)=>t+e[d])}function H(n){const e=n.reduce((t,d)=>t+d,0);return e?n.map(t=>t/e):n.map(()=>0)}function k(n){return Math.max(...n.map(e=>Math.abs(e-z)))}function I(n){n.append(w(`
+import{e as w}from"./chrome-BqE1ziQq.js";import{t as s,o as A,q as g,r as E}from"./index-C9RxrNRS.js";const m=6,z=1/m;function L(){return 1+Math.floor(Math.random()*m)}function T(n){const e=new Array(m).fill(0);for(let t=0;t<n;t++)e[L()-1]++;return e}function q(n,e){return n.map((t,d)=>t+e[d])}function H(n){const e=n.reduce((t,d)=>t+d,0);return e?n.map(t=>t/e):n.map(()=>0)}function k(n){return Math.max(...n.map(e=>Math.abs(e-z)))}function I(n){n.append(w(`
     <div class="viz">
       <div class="viz-controls wrap">
         <button type="button" class="chip" data-n="1">${s("viz.prob.roll1")}</button>

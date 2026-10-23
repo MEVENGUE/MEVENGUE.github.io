@@ -1,4 +1,4 @@
-import{e as v}from"./chrome-BqE1ziQq.js";import{t as i}from"./index-BCa5qDPf.js";function g(t){return Array.from({length:t},(e,n)=>({guest:n+1,room:n+1}))}function z(t){return[{guest:"★",room:1},...Array.from({length:t},(e,n)=>({guest:n+1,room:n+2}))]}function h(t){const e=Array.from({length:t},(r,o)=>({guest:o+1,room:2*(o+1)})),n=Array.from({length:t},(r,o)=>({guest:`ω${o+1}`,room:2*o+1}));return[...e,...n].sort((r,o)=>r.room-o.room)}function b(t,e){return t==="full"?e:t==="one"?e+1:2*e}function q(t){t.append(v(`
+import{e as v}from"./chrome-BqE1ziQq.js";import{t as i}from"./index-C9RxrNRS.js";function g(t){return Array.from({length:t},(e,n)=>({guest:n+1,room:n+1}))}function z(t){return[{guest:"★",room:1},...Array.from({length:t},(e,n)=>({guest:n+1,room:n+2}))]}function h(t){const e=Array.from({length:t},(r,o)=>({guest:o+1,room:2*(o+1)})),n=Array.from({length:t},(r,o)=>({guest:`ω${o+1}`,room:2*o+1}));return[...e,...n].sort((r,o)=>r.room-o.room)}function b(t,e){return t==="full"?e:t==="one"?e+1:2*e}function q(t){t.append(v(`
     <div class="viz">
       <div class="viz-controls">
         <label class="ctrl">${i("viz.infinity.rooms")}

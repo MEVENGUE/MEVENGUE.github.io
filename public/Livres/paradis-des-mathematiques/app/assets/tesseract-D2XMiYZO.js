@@ -1,4 +1,4 @@
-import{t as o,W as E,a as G,P as L,A as P,i as M,j as R,k as $,e as j,L as B,f as F,l as W,g as k,m as A,n as q,p as D}from"./index-BCa5qDPf.js";import{e as H,b as U}from"./chrome-BqE1ziQq.js";function O(d,{reducedMotion:S}){d.append(H(`
+import{t as o,W as E,a as G,P as L,A as P,i as M,j as R,k as $,e as j,L as B,f as F,l as W,g as k,m as A,n as q,p as D}from"./index-C9RxrNRS.js";import{e as H,b as U}from"./chrome-BqE1ziQq.js";function O(d,{reducedMotion:S}){d.append(H(`
     <div class="viz">
       <div class="viz-controls">
         <label class="ctrl">${o("viz.tesseract.xw")}
