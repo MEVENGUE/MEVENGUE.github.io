@@ -130,7 +130,13 @@ const defaultEdition = editions.find((edition) => edition.id === defaultLang) ??
           </div>
         </div>
         <div class="book-viewer book-viewer-3d">
-          <iframe src={demoUrl} title={title} loading="lazy" allow="fullscreen"></iframe>
+          <iframe
+            src={demoUrl}
+            title={title}
+            loading="lazy"
+            allow="fullscreen"
+            sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-popups allow-popups-to-escape-sandbox"
+          ></iframe>
         </div>
       </div>
     </section>
